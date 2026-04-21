@@ -1,0 +1,14 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type { Guide } from "../data/guides";
+
+interface Props {
+  guide: Guide;
+}
+
+const { guide } = Astro.props;
+---
+
+<BaseLayout title={guide.title} description={guide.description}>
+  <slot />
+</BaseLayout>

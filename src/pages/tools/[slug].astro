@@ -1,0 +1,27 @@
+---
+import ToolLayout from "../../layouts/ToolLayout.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import { tools } from "../../data/tools";
+
+export function getStaticPaths() {
+  return tools.map((tool) => ({
+    params: { slug: tool.slug },
+    props: { tool }
+  }));
+}
+
+const { tool } = Astro.props;
+---
+
+<ToolLayout tool={tool}>
+  <h1>{tool.title}</h1>
+  <p>{tool.description}</p>
+
+  <div style="padding: 1rem; border: 1px solid #ccc; margin: 2rem 0;">
+    <p>Calculator UI for <strong>{tool.title}</strong> goes here.</p>
+  </div>
+
+  <RelatedTools currentSlug={tool.slug} />
+  <RelatedGuides currentSlug={tool.slug} />
+</ToolLayout>

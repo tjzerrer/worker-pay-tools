@@ -1,0 +1,28 @@
+---
+import { tools } from "../data/tools";
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+
+const currentTool = tools.find((tool) => tool.slug === currentSlug);
+
+const relatedTools = currentTool
+  ? tools.filter((tool) => currentTool.relatedToolSlugs.includes(tool.slug))
+  : [];
+---
+
+{relatedTools.length > 0 && (
+  <section>
+    <h2>Related Tools</h2>
+    <ul>
+      {relatedTools.map((tool) => (
+        <li>
+          <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

@@ -1,0 +1,38 @@
+---
+import GuideLayout from "../../layouts/GuideLayout.astro";
+import { guides } from "../../data/guides";
+import { tools } from "../../data/tools";
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide }
+  }));
+}
+
+const { guide } = Astro.props;
+
+const relatedTools = guide.relatedToolSlugs
+  ? tools.filter((tool) => guide.relatedToolSlugs?.includes(tool.slug))
+  : [];
+---
+
+<GuideLayout guide={guide}>
+  <h1>{guide.title}</h1>
+  <p>{guide.description}</p>
+
+  <p>This guide content will go here.</p>
+
+  {relatedTools.length > 0 && (
+    <section>
+      <h2>Related Tools</h2>
+      <ul>
+        {relatedTools.map((tool) => (
+          <li>
+            <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</GuideLayout>

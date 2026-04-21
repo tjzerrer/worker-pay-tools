@@ -1,0 +1,29 @@
+---
+import { tools } from "../data/tools";
+import { guides } from "../data/guides";
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+
+const currentTool = tools.find((tool) => tool.slug === currentSlug);
+
+const relatedGuides = currentTool?.relatedGuideSlugs
+  ? guides.filter((guide) => currentTool.relatedGuideSlugs?.includes(guide.slug))
+  : [];
+---
+
+{relatedGuides.length > 0 && (
+  <section>
+    <h2>Related Guides</h2>
+    <ul>
+      {relatedGuides.map((guide) => (
+        <li>
+          <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

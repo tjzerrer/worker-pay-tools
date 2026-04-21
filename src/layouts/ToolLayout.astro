@@ -1,0 +1,14 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type { Tool } from "../data/tools";
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+---
+
+<BaseLayout title={tool.title} description={tool.description}>
+  <slot />
+</BaseLayout>
