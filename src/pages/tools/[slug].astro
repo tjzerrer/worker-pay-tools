@@ -2,8 +2,8 @@
 import ToolLayout from "../../layouts/ToolLayout.astro";
 import RelatedTools from "../../components/RelatedTools.astro";
 import RelatedGuides from "../../components/RelatedGuides.astro";
-import HoursWorkedCalculator from "../../components/calculators/HoursWorkedCalculator.astro";
-import TimeCardCalculator from "../../components/calculators/TimeCardCalculator.astro";
+import HoursWorkedCalculator from "../../components/calculators/HoursWorkedCalculator";
+import TimeCardCalculator from "../../components/calculators/TimeCardCalculator";
 import { tools } from "../../data/tools";
 
 export function getStaticPaths() {
@@ -28,7 +28,7 @@ const Calculator = calculatorMap[tool.slug as keyof typeof calculatorMap];
   <p>{tool.description}</p>
 
   {Calculator ? (
-    <Calculator />
+    <Calculator client:load />
   ) : (
     <div style="padding: 1rem; border: 1px solid #ccc; margin: 2rem 0;">
       <p>Calculator UI for <strong>{tool.title}</strong> goes here.</p>
