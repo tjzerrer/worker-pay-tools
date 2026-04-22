@@ -1,0 +1,76 @@
+---
+let start = "";
+let end = "";
+let breakMinutes = "0";
+let hourlyRate = "";
+let daysWorked = "5";
+
+let shiftHours = "";
+let weeklyHours = "";
+let grossPay = "";
+
+function calculate() {
+  if (!start || !end) return;
+
+  const startTime = new Date(`1970-01-01T${start}:00`);
+  const endTime = new Date(`1970-01-01T${end}:00`);
+
+  let diffHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+
+  if (diffHours < 0) diffHours += 24;
+
+  const breakHours = Number(breakMinutes || 0) / 60;
+  const finalShiftHours = Math.max(diffHours - breakHours, 0);
+
+  const weekly = finalShiftHours * Number(daysWorked || 0);
+  const pay = weekly * Number(hourlyRate || 0);
+
+  shiftHours = finalShiftHours.toFixed(2);
+  weeklyHours = weekly.toFixed(2);
+  grossPay = pay.toFixed(2);
+}
+---
+
+<div style="border:1px solid #ccc; padding:1rem; margin:2rem 0;">
+  <h2>Time Card Calculator</h2>
+  <p>Enter your shift details to estimate hours and pay.</p>
+
+  <div style="display:grid; gap:1rem; max-width:500px;">
+    <div>
+      <label for="start">Start Time</label><br />
+      <input id="start" type="time" bind:value={start} />
+    </div>
+
+    <div>
+      <label for="end">End Time</label><br />
+      <input id="end" type="time" bind:value={end} />
+    </div>
+
+    <div>
+      <label for="breakMinutes">Unpaid Break (minutes)</label><br />
+      <input id="breakMinutes" type="number" min="0" bind:value={breakMinutes} />
+    </div>
+
+    <div>
+      <label for="daysWorked">Days Worked Per Week</label><br />
+      <input id="daysWorked" type="number" min="0" max="7" bind:value={daysWorked} />
+    </div>
+
+    <div>
+      <label for="hourlyRate">Hourly Rate ($)</label><br />
+      <input id="hourlyRate" type="number" min="0" step="0.01" bind:value={hourlyRate} />
+    </div>
+
+    <div>
+      <button on:click={calculate}>Calculate</button>
+    </div>
+  </div>
+
+  {shiftHours && (
+    <div style="margin-top:2rem; padding:1rem; background:#f7f7f7; border:1px solid #ddd;">
+      <p><strong>Hours worked per shift:</strong> {shiftHours}</p>
+      <p><strong>Total weekly hours:</strong> {weeklyHours}</p>
+      <p><strong>Estimated gross pay:</strong> ${grossPay}</p>
+    </div>
+  )}
+</div>
