@@ -14,9 +14,68 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <style>
+      :root {
+        --border: #dddddd;
+        --text: #1f2937;
+        --muted: #555;
+        --bg: #ffffff;
+        --soft: #f8f8f8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.5;
+      }
+
+      a {
+        color: #1d4ed8;
+      }
+
+      .site-header {
+        border-bottom: 1px solid var(--border);
+        background: #fff;
+      }
+
+      .site-header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1rem 1.25rem;
+      }
+
+      .site-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1d4ed8; /* blue */
+  text-decoration: none;
+}
+
+.site-brand:hover {
+  text-decoration: underline;
+}
+
+      .page-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+    </style>
   </head>
   <body>
-    <main style="max-width: 900px; margin: 0 auto; padding: 2rem;">
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a class="site-brand" href="/">Time and Pay Tools</a>
+      </div>
+    </header>
+
+    <main class="page-wrap">
       <slot />
     </main>
   </body>
