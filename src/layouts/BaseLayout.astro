@@ -1,4 +1,6 @@
 ---
+import Analytics from '@vercel/analytics/astro';
+
 interface Props {
   title: string;
   description: string;
@@ -51,15 +53,15 @@ const { title, description } = Astro.props;
       }
 
       .site-brand {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1d4ed8; /* blue */
-  text-decoration: none;
-}
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1d4ed8;
+        text-decoration: none;
+      }
 
-.site-brand:hover {
-  text-decoration: underline;
-}
+      .site-brand:hover {
+        text-decoration: underline;
+      }
 
       .page-wrap {
         max-width: 1100px;
@@ -78,5 +80,8 @@ const { title, description } = Astro.props;
     <main class="page-wrap">
       <slot />
     </main>
+
+    <!-- ✅ Vercel Analytics -->
+    <Analytics />
   </body>
 </html>
