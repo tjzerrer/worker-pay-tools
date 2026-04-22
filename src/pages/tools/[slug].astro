@@ -14,22 +14,17 @@ export function getStaticPaths() {
 }
 
 const { tool } = Astro.props;
-
-const calculatorMap = {
-  "hours-worked-calculator": HoursWorkedCalculator,
-  "time-card-calculator": TimeCardCalculator
-};
-
-const Calculator = calculatorMap[tool.slug as keyof typeof calculatorMap];
 ---
 
 <ToolLayout tool={tool}>
   <h1>{tool.title}</h1>
   <p>{tool.description}</p>
 
-  {Calculator ? (
-    <Calculator client:load />
-  ) : (
+  {tool.slug === "hours-worked-calculator" && <HoursWorkedCalculator client:load />}
+
+  {tool.slug === "time-card-calculator" && <TimeCardCalculator client:load />}
+
+  {tool.slug !== "hours-worked-calculator" && tool.slug !== "time-card-calculator" && (
     <div style="padding: 1rem; border: 1px solid #ccc; margin: 2rem 0;">
       <p>Calculator UI for <strong>{tool.title}</strong> goes here.</p>
     </div>
