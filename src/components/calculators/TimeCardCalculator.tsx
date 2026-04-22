@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type DayEntry = {
   start: string;
@@ -6,23 +6,54 @@ type DayEntry = {
   breakMinutes: string;
 };
 
+type PayBreakdown = {
+  regularHours: string;
+  overtimeHours: string;
+  regularPay: string;
+  overtimePay: string;
+};
+
+const emptyDay = (): DayEntry => ({
+  start: "",
+  end: "",
+  breakMinutes: "0"
+});
+
 export default function TimeCardCalculator() {
   const [days, setDays] = useState<DayEntry[]>([
-    { start: "", end: "", breakMinutes: "0" },
-    { start: "", end: "", breakMinutes: "0" },
-    { start: "", end: "", breakMinutes: "0" },
-    { start: "", end: "", breakMinutes: "0" },
-    { start: "", end: "", breakMinutes: "0" }
+    emptyDay(),
+    emptyDay(),
+    emptyDay(),
+    emptyDay(),
+    emptyDay()
   ]);
 
   const [hourlyRate, setHourlyRate] = useState("");
   const [totalHours, setTotalHours] = useState("");
   const [grossPay, setGrossPay] = useState("");
+  const [breakdown, setBreakdown] = useState<PayBreakdown | null>(null);
 
   function updateDay(index: number, field: keyof DayEntry, value: string) {
-    const updated = [...days];
-    updated[index] = { ...updated[index], [field]: value };
-    setDays(updated);
+    setDays((prev) =>
+      prev.map((day, i) => (i === index ? { ...day, [field]: value } : day))
+    );
+  }
+
+  function addDay() {
+    setDays((prev) => [...prev, emptyDay()]);
+  }
+
+  function removeDay(index: number) {
+    if (days.length === 1) return;
+    setDays((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function resetCalculator() {
+    setDays([emptyDay(), emptyDay(), emptyDay(), emptyDay(), emptyDay()]);
+    setHourlyRate("");
+    setTotalHours("");
+    setGrossPay("");
+    setBreakdown(null);
   }
 
   function calculate() {
@@ -44,85 +75,413 @@ export default function TimeCardCalculator() {
       total += finalHours;
     }
 
+    const overtimeHours = Math.max(total - 40, 0);
+    const regularHours = Math.min(total, 40);
+    const rate = Number(hourlyRate || 0);
+
+    const regularPay = regularHours * rate;
+    const overtimePay = overtimeHours * rate * 1.5;
+    const totalPay = regularPay + overtimePay;
+
     setTotalHours(total.toFixed(2));
-    setGrossPay((total * Number(hourlyRate || 0)).toFixed(2));
+    setGrossPay(totalPay.toFixed(2));
+    setBreakdown({
+      regularHours: regularHours.toFixed(2),
+      overtimeHours: overtimeHours.toFixed(2),
+      regularPay: regularPay.toFixed(2),
+      overtimePay: overtimePay.toFixed(2)
+    });
   }
 
+  const usedDays = useMemo(
+    () => days.filter((day) => day.start && day.end).length,
+    [days]
+  );
+
   return (
-    <div style={{ border: "1px solid #ccc", padding: "1rem", margin: "2rem 0" }}>
+    <div style={{ margin: "2rem 0" }}>
+      <style>{`
+        .tc-wrap {
+          margin-top: 1.5rem;
+          display: grid;
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .tc-card {
+          border: 1px solid #ddd;
+          padding: 1rem;
+          background: #fff;
+        }
+
+        .tc-heading {
+          margin-top: 0;
+          margin-bottom: 0.35rem;
+        }
+
+        .tc-subtle {
+          font-size: 0.92rem;
+          color: #555;
+          margin-top: 0;
+          margin-bottom: 1rem;
+          line-height: 1.4;
+        }
+
+        .tc-grid-head,
+        .tc-grid-row {
+          display: grid;
+          grid-template-columns: 68px 1fr 1fr 78px 34px;
+          gap: 0.45rem;
+          align-items: center;
+        }
+
+        .tc-grid-head {
+          font-weight: 700;
+          font-size: 0.95rem;
+          margin-bottom: 0.45rem;
+        }
+
+        .tc-grid-row {
+          margin-bottom: 0.65rem;
+        }
+
+        .tc-day-label {
+          font-weight: 600;
+        }
+
+        .tc-input {
+          width: 100%;
+          box-sizing: border-box;
+          height: 34px;
+          padding: 0.3rem 0.45rem;
+        }
+
+        .tc-remove {
+          width: 30px;
+          height: 30px;
+          padding: 0;
+          background: #f3f3f3;
+          border: 1px solid #ccc;
+          cursor: pointer;
+          line-height: 1;
+        }
+
+        .tc-remove:disabled {
+          background: #ddd;
+          cursor: not-allowed;
+        }
+
+        .tc-actions {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          margin-top: 1rem;
+        }
+
+        .tc-secondary-btn {
+          padding: 0.6rem 1rem;
+          background: #f3f3f3;
+          border: 1px solid #ccc;
+          cursor: pointer;
+        }
+
+        .tc-primary-btn {
+          margin-top: 1rem;
+          padding: 0.7rem 1.15rem;
+          background: #333;
+          color: #fff;
+          border: none;
+          cursor: pointer;
+        }
+
+        .tc-field {
+          margin-top: 1rem;
+        }
+
+        .tc-rate-input {
+          margin-top: 0.35rem;
+          width: 140px;
+          max-width: 100%;
+          height: 36px;
+          padding: 0.35rem 0.5rem;
+          box-sizing: border-box;
+        }
+
+        .tc-results-empty {
+          color: #555;
+        }
+
+        .tc-results-top {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .tc-stat {
+          border: 1px solid #e5e5e5;
+          background: #fafafa;
+          padding: 0.8rem;
+        }
+
+        .tc-stat-label {
+          font-size: 0.85rem;
+          color: #666;
+          margin-bottom: 0.25rem;
+        }
+
+        .tc-stat-value {
+          font-size: 1.15rem;
+          font-weight: 700;
+        }
+
+        .tc-breakdown p {
+          margin: 0.45rem 0;
+        }
+
+        .tc-total-pay {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid #ddd;
+          font-size: 1.2rem;
+        }
+
+        .tc-helper {
+          margin-top: 2rem;
+          border: 1px solid #ddd;
+          padding: 1rem;
+          background: #fafafa;
+        }
+
+        .tc-helper h3 {
+          margin-top: 0;
+        }
+
+        .tc-badge-row {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          margin-top: 0.75rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .tc-badge {
+          display: inline-block;
+          padding: 0.25rem 0.55rem;
+          border: 1px solid #ddd;
+          background: #f8f8f8;
+          font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+          .tc-wrap {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .tc-grid-head {
+            display: none;
+          }
+
+          .tc-grid-row {
+            grid-template-columns: 1fr;
+            gap: 0.45rem;
+            border: 1px solid #eee;
+            padding: 0.75rem;
+            margin-bottom: 0.85rem;
+            background: #fcfcfc;
+          }
+
+          .tc-mobile-label {
+            display: block;
+            font-size: 0.82rem;
+            color: #666;
+            margin-bottom: 0.2rem;
+          }
+
+          .tc-remove {
+            width: 100%;
+            height: 34px;
+          }
+
+          .tc-results-top {
+            grid-template-columns: 1fr;
+          }
+
+          .tc-rate-input {
+            width: 100%;
+          }
+        }
+
+        @media (min-width: 641px) {
+          .tc-mobile-label {
+            display: none;
+          }
+        }
+      `}</style>
+
       <h2>Weekly Time Card Calculator</h2>
-      <p>Enter your hours for each day to calculate total weekly hours and pay.</p>
+      <p>Enter your hours for each day to calculate total weekly hours and estimated pay.</p>
 
-      <div style={{ display: "grid", gap: "1rem", maxWidth: "600px" }}>
-        {days.map((day, i) => (
-          <div key={i} style={{ border: "1px solid #ddd", padding: "1rem" }}>
-            <strong>Day {i + 1}</strong>
-            <br />
-            <br />
+      <div className="tc-wrap">
+        <div className="tc-card">
+          <h3 className="tc-heading">Enter Hours</h3>
+          <p className="tc-subtle">
+            Leave unused days blank, or add and remove days as needed.
+          </p>
 
-            <label>Start</label>
+          <div className="tc-grid-head">
+            <div>Day</div>
+            <div>Start</div>
+            <div>End</div>
+            <div>Break</div>
+            <div></div>
+          </div>
+
+          {days.map((day, i) => (
+            <div key={i} className="tc-grid-row">
+              <div className="tc-day-label">Day {i + 1}</div>
+
+              <div>
+                <span className="tc-mobile-label">Start</span>
+                <input
+                  className="tc-input"
+                  type="time"
+                  value={day.start}
+                  onChange={(e) => updateDay(i, "start", e.target.value)}
+                />
+              </div>
+
+              <div>
+                <span className="tc-mobile-label">End</span>
+                <input
+                  className="tc-input"
+                  type="time"
+                  value={day.end}
+                  onChange={(e) => updateDay(i, "end", e.target.value)}
+                />
+              </div>
+
+              <div>
+                <span className="tc-mobile-label">Break (min)</span>
+                <input
+                  className="tc-input"
+                  type="number"
+                  min="0"
+                  value={day.breakMinutes}
+                  onChange={(e) => updateDay(i, "breakMinutes", e.target.value)}
+                  placeholder="0"
+                />
+              </div>
+
+              <div>
+                <span className="tc-mobile-label">Remove</span>
+                <button
+                  type="button"
+                  onClick={() => removeDay(i)}
+                  disabled={days.length === 1}
+                  className="tc-remove"
+                  aria-label={`Remove day ${i + 1}`}
+                  title={`Remove day ${i + 1}`}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <div className="tc-actions">
+            <button type="button" onClick={addDay} className="tc-secondary-btn">
+              Add Day
+            </button>
+
+            <button
+              type="button"
+              onClick={resetCalculator}
+              className="tc-secondary-btn"
+            >
+              Reset
+            </button>
+          </div>
+
+          <div className="tc-field">
+            <label htmlFor="hourlyRate">
+              <strong>Hourly Rate ($)</strong>
+            </label>
             <br />
             <input
-              type="time"
-              value={day.start}
-              onChange={(e) => updateDay(i, "start", e.target.value)}
-            />
-
-            <br />
-            <br />
-
-            <label>End</label>
-            <br />
-            <input
-              type="time"
-              value={day.end}
-              onChange={(e) => updateDay(i, "end", e.target.value)}
-            />
-
-            <br />
-            <br />
-
-            <label>Break (minutes)</label>
-            <br />
-            <input
+              id="hourlyRate"
+              className="tc-rate-input"
               type="number"
               min="0"
-              value={day.breakMinutes}
-              onChange={(e) => updateDay(i, "breakMinutes", e.target.value)}
+              step="0.01"
+              value={hourlyRate}
+              onChange={(e) => setHourlyRate(e.target.value)}
             />
           </div>
-        ))}
-      </div>
 
-      <div style={{ marginTop: "1rem" }}>
-        <label>Hourly Rate ($)</label>
-        <br />
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value={hourlyRate}
-          onChange={(e) => setHourlyRate(e.target.value)}
-        />
-      </div>
-
-      <div style={{ marginTop: "1rem" }}>
-        <button onClick={calculate}>Calculate</button>
-      </div>
-
-      {totalHours && (
-        <div
-          style={{
-            marginTop: "2rem",
-            padding: "1rem",
-            background: "#f7f7f7",
-            border: "1px solid #ddd"
-          }}
-        >
-          <p><strong>Total Weekly Hours:</strong> {totalHours}</p>
-          <p><strong>Estimated Gross Pay:</strong> ${grossPay}</p>
+          <button onClick={calculate} className="tc-primary-btn">
+            Calculate
+          </button>
         </div>
-      )}
+
+        <div className="tc-card">
+          <h3 className="tc-heading">Results</h3>
+
+          {!totalHours && (
+            <p className="tc-results-empty">Enter your hours and click calculate.</p>
+          )}
+
+          {totalHours && (
+            <>
+              <div className="tc-badge-row">
+                <span className="tc-badge">Days used: {usedDays}</span>
+                <span className="tc-badge">Overtime after 40 hours</span>
+              </div>
+
+              <div className="tc-results-top">
+                <div className="tc-stat">
+                  <div className="tc-stat-label">Total Hours</div>
+                  <div className="tc-stat-value">{totalHours}</div>
+                </div>
+
+                <div className="tc-stat">
+                  <div className="tc-stat-label">Estimated Pay</div>
+                  <div className="tc-stat-value">${grossPay}</div>
+                </div>
+              </div>
+
+              {breakdown && (
+                <div className="tc-breakdown">
+                  <p>Regular Hours: {breakdown.regularHours}</p>
+                  <p>Overtime Hours: {breakdown.overtimeHours}</p>
+                  <p>Regular Pay: ${breakdown.regularPay}</p>
+                  <p>Overtime Pay: ${breakdown.overtimePay}</p>
+                </div>
+              )}
+
+              <div className="tc-total-pay">
+                <strong>Total Pay: ${grossPay}</strong>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="tc-helper">
+        <h3>How we calculate this</h3>
+        <p>
+          For each day, we subtract your unpaid break from the total time between
+          your start and end times. Then we add up all daily hours for the week.
+        </p>
+        <p>
+          Any hours above 40 are treated as overtime at 1.5 times your hourly
+          rate. The first 40 hours are paid at your regular hourly rate.
+        </p>
+      </div>
     </div>
   );
 }
