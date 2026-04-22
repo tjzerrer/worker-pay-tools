@@ -18,21 +18,39 @@ const relatedTools = guide.relatedToolSlugs
 ---
 
 <GuideLayout guide={guide}>
-  <h1>{guide.title}</h1>
-  <p>{guide.description}</p>
+  <article style="max-width: 850px;">
+    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">{guide.title}</h1>
+    <p style="font-size: 1.1rem; color: #555; margin-bottom: 2rem;">
+      {guide.description}
+    </p>
 
-  <p>This guide content will go here.</p>
-
-  {relatedTools.length > 0 && (
-    <section>
-      <h2>Related Tools</h2>
-      <ul>
-        {relatedTools.map((tool) => (
-          <li>
-            <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
-          </li>
+    {guide.sections?.map((section) => (
+      <section style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 0.75rem;">{section.heading}</h2>
+        {section.paragraphs.map((paragraph) => (
+          <p style="margin-bottom: 1rem; line-height: 1.7;">{paragraph}</p>
         ))}
-      </ul>
-    </section>
-  )}
+      </section>
+    ))}
+
+    {relatedTools.length > 0 && (
+      <section
+        style="
+          margin-top: 2.5rem;
+          border: 1px solid #ddd;
+          padding: 1rem;
+          background: #fafafa;
+        "
+      >
+        <h2 style="margin-top: 0;">Related Tools</h2>
+        <ul style="margin-bottom: 0;">
+          {relatedTools.map((tool) => (
+            <li>
+              <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </article>
 </GuideLayout>
