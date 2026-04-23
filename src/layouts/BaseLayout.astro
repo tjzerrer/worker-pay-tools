@@ -441,6 +441,171 @@ const { title, description } = Astro.props;
         }
       }
     </style>
+    <style is:global>
+      .calculator-block {
+        margin: 2rem 0;
+      }
+
+      .calc-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 2rem;
+        align-items: start;
+        margin-top: 1.5rem;
+      }
+
+      .calc-panel,
+      .helper-panel {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 1rem;
+      }
+
+      .calc-panel h3,
+      .helper-panel h3 {
+        margin-top: 0;
+      }
+
+      .calc-field {
+        display: grid;
+        gap: 0.35rem;
+        width: max-content;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .calc-field input {
+        width: 180px;
+        max-width: 100%;
+        min-height: 36px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.35rem 0.5rem;
+        font: inherit;
+      }
+
+      .compact-field input {
+        width: 180px;
+      }
+
+      .calc-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .primary-button,
+      .secondary-button,
+      .tc-primary-btn,
+      .tc-secondary-btn,
+      .tc-remove,
+      .hw-primary-btn,
+      .hw-secondary-btn,
+      .ot-primary-btn,
+      .ot-secondary-btn,
+      .result-action-btn {
+        transition:
+          background-color 120ms ease,
+          border-color 120ms ease,
+          color 120ms ease,
+          transform 80ms ease;
+      }
+
+      .primary-button:active,
+      .tc-primary-btn:active,
+      .hw-primary-btn:active,
+      .ot-primary-btn:active,
+      .result-action-print:active {
+        background: var(--brand-dark);
+        transform: translateY(1px);
+      }
+
+      .secondary-button:active,
+      .tc-secondary-btn:active,
+      .tc-remove:active,
+      .hw-secondary-btn:active,
+      .ot-secondary-btn:active,
+      .result-action-pdf:active {
+        background: #e6edf3;
+        border-color: var(--brand);
+        transform: translateY(1px);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .result-card {
+        display: grid;
+        gap: 0.35rem;
+        border: 1px solid #cfe3dc;
+        border-radius: 8px;
+        background: var(--soft);
+        padding: 1rem;
+      }
+
+      .result-card span {
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .result-card strong {
+        color: var(--ok);
+        font-size: 1.65rem;
+      }
+
+      .result-list {
+        margin: 1rem 0 0;
+      }
+
+      .result-list div {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid #edf2f7;
+      }
+
+      .result-list dt {
+        color: var(--muted);
+      }
+
+      .result-list dd {
+        margin: 0;
+        font-weight: 800;
+      }
+
+      .summary-panel {
+        margin-top: 1rem;
+        border: 1px solid #edf2f7;
+        border-radius: 8px;
+        background: #fbfcfd;
+        padding: 0.85rem;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 860px) {
+        .calc-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .primary-button,
+        .secondary-button {
+          width: auto;
+        }
+
+        .calc-field,
+        .calc-field input {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="site-header">
