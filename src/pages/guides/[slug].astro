@@ -13,13 +13,17 @@ export function getStaticPaths() {
 const { guide } = Astro.props;
 
 const relatedTools = guide.relatedToolSlugs
-  ? tools.filter((tool) => guide.relatedToolSlugs?.includes(tool.slug))
+  ? guide.relatedToolSlugs
+      .map((slug) => tools.find((tool) => tool.slug === slug))
+      .filter((tool) => tool !== undefined)
   : [];
 
 const primaryTool = relatedTools[0];
 
 function findTools(slugs: string[] = []) {
-  return tools.filter((tool) => slugs.includes(tool.slug));
+  return slugs
+    .map((slug) => tools.find((tool) => tool.slug === slug))
+    .filter((tool) => tool !== undefined);
 }
 ---
 

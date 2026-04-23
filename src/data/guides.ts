@@ -175,7 +175,8 @@ export const guides: Guide[] = [
           "health insurance",
           "retirement contributions"
         ],
-        example: "Example: $800 gross pay - $160 deductions = $640 net pay."
+        example: "Example: $800 gross pay - $160 deductions = $640 net pay.",
+        toolSlugs: ["net-pay-estimator"]
       },
       {
         heading: "Key Difference",
