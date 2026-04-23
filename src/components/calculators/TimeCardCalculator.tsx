@@ -13,6 +13,8 @@ type PayBreakdown = {
   overtimePay: string;
 };
 
+type OvertimeRule = "weekly40" | "daily8";
+
 const emptyDay = (): DayEntry => ({
   start: "",
   end: "",
@@ -29,6 +31,7 @@ export default function TimeCardCalculator() {
   ]);
 
   const [hourlyRate, setHourlyRate] = useState("");
+  const [overtimeRule, setOvertimeRule] = useState<OvertimeRule>("weekly40");
   const [totalHours, setTotalHours] = useState("");
   const [grossPay, setGrossPay] = useState("");
   const [breakdown, setBreakdown] = useState<PayBreakdown | null>(null);
@@ -51,6 +54,7 @@ export default function TimeCardCalculator() {
   function resetCalculator() {
     setDays([emptyDay(), emptyDay(), emptyDay(), emptyDay(), emptyDay()]);
     setHourlyRate("");
+    setOvertimeRule("weekly40");
     setTotalHours("");
     setGrossPay("");
     setBreakdown(null);
@@ -58,6 +62,8 @@ export default function TimeCardCalculator() {
 
   function calculate() {
     let total = 0;
+    let dailyRegularTotal = 0;
+    let dailyOvertimeTotal = 0;
 
     for (const day of days) {
       if (!day.start || !day.end) continue;
@@ -73,10 +79,14 @@ export default function TimeCardCalculator() {
       const finalHours = Math.max(diff - breakHours, 0);
 
       total += finalHours;
+      dailyRegularTotal += Math.min(finalHours, 8);
+      dailyOvertimeTotal += Math.max(finalHours - 8, 0);
     }
 
-    const overtimeHours = Math.max(total - 40, 0);
-    const regularHours = Math.min(total, 40);
+    const overtimeHours =
+      overtimeRule === "daily8" ? dailyOvertimeTotal : Math.max(total - 40, 0);
+    const regularHours =
+      overtimeRule === "daily8" ? dailyRegularTotal : Math.min(total, 40);
     const rate = Number(hourlyRate || 0);
 
     const regularPay = regularHours * rate;
@@ -97,6 +107,11 @@ export default function TimeCardCalculator() {
     () => days.filter((day) => day.start && day.end).length,
     [days]
   );
+
+  const overtimeLabel =
+    overtimeRule === "daily8"
+      ? "Overtime after 8 hours per day"
+      : "Overtime after 40 hours per week";
 
   return (
     <div style={{ margin: "2rem 0" }}>
@@ -203,6 +218,28 @@ export default function TimeCardCalculator() {
 
         .tc-field {
           margin-top: 1rem;
+        }
+
+        .tc-radio-group {
+          display: grid;
+          gap: 0.45rem;
+          margin-top: 0.45rem;
+        }
+
+        .tc-radio-option {
+          display: flex;
+          gap: 0.5rem;
+          align-items: flex-start;
+          max-width: 330px;
+          line-height: 1.35;
+        }
+
+        .tc-radio-option input {
+          margin-top: 0.18rem;
+        }
+
+        .tc-radio-option span {
+          font-weight: 600;
         }
 
         .tc-rate-input {
@@ -436,6 +473,34 @@ export default function TimeCardCalculator() {
             />
           </div>
 
+          <fieldset className="tc-field" style={{ border: 0, padding: 0 }}>
+            <legend>
+              <strong>Overtime Rule</strong>
+            </legend>
+            <div className="tc-radio-group">
+              <label className="tc-radio-option">
+                <input
+                  type="radio"
+                  name="overtimeRule"
+                  value="weekly40"
+                  checked={overtimeRule === "weekly40"}
+                  onChange={() => setOvertimeRule("weekly40")}
+                />
+                <span>Over 40 hours per week</span>
+              </label>
+              <label className="tc-radio-option">
+                <input
+                  type="radio"
+                  name="overtimeRule"
+                  value="daily8"
+                  checked={overtimeRule === "daily8"}
+                  onChange={() => setOvertimeRule("daily8")}
+                />
+                <span>Over 8 hours per day</span>
+              </label>
+            </div>
+          </fieldset>
+
           <button onClick={calculate} className="tc-primary-btn">
             Calculate
           </button>
@@ -452,7 +517,7 @@ export default function TimeCardCalculator() {
             <>
               <div className="tc-badge-row">
                 <span className="tc-badge">Days used: {usedDays}</span>
-                <span className="tc-badge">Overtime after 40 hours</span>
+                <span className="tc-badge">{overtimeLabel}</span>
               </div>
 
               <div className="tc-results-top">
@@ -491,8 +556,10 @@ export default function TimeCardCalculator() {
           your start and end times. Then we add up all daily hours for the week.
         </p>
         <p>
-          Any hours above 40 are treated as overtime at 1.5 times your hourly
-          rate. The first 40 hours are paid at your regular hourly rate.
+          Choose the overtime rule that applies to your situation. Weekly
+          overtime counts hours above 40 in the week. Daily overtime counts
+          hours above 8 on each day. Overtime is estimated at 1.5 times your
+          hourly rate.
         </p>
       </div>
     </div>
