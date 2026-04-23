@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ResultActions from "./ResultActions";
+import { formatMoney, formatNumber, formatNumberInput, parseNumberInput } from "./numberFormat";
 
 type Results = {
   regularHours: string;
@@ -19,11 +20,11 @@ export default function PaycheckCalculator() {
   const [results, setResults] = useState<Results | null>(null);
 
   function calculate() {
-    const rate = Number(hourlyRate || 0);
-    const hours = Number(hoursWorked || 0);
-    const threshold = Number(overtimeThreshold || 40);
-    const multiplier = Number(overtimeMultiplier || 1.5);
-    const deductionRate = Number(deductionPercent || 0) / 100;
+    const rate = parseNumberInput(hourlyRate);
+    const hours = parseNumberInput(hoursWorked);
+    const threshold = parseNumberInput(overtimeThreshold) || 40;
+    const multiplier = parseNumberInput(overtimeMultiplier) || 1.5;
+    const deductionRate = parseNumberInput(deductionPercent) / 100;
 
     const overtimeHours = Math.max(hours - threshold, 0);
     const regularHours = Math.min(hours, threshold);
@@ -33,12 +34,12 @@ export default function PaycheckCalculator() {
     const effectiveRate = hours > 0 ? grossPay / hours : 0;
 
     setResults({
-      regularHours: regularHours.toFixed(2),
-      overtimeHours: overtimeHours.toFixed(2),
-      grossPay: grossPay.toFixed(2),
-      deductions: deductions.toFixed(2),
-      netPay: netPay.toFixed(2),
-      effectiveRate: effectiveRate.toFixed(2)
+      regularHours: formatNumber(regularHours),
+      overtimeHours: formatNumber(overtimeHours),
+      grossPay: formatMoney(grossPay),
+      deductions: formatMoney(deductions),
+      netPay: formatMoney(netPay),
+      effectiveRate: formatMoney(effectiveRate)
     });
   }
 
@@ -67,11 +68,10 @@ export default function PaycheckCalculator() {
             <span>Hourly Rate ($)</span>
             <input
               id="paycheckHourlyRate"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={hourlyRate}
-              onChange={(event) => setHourlyRate(event.target.value)}
+              onChange={(event) => setHourlyRate(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -79,11 +79,10 @@ export default function PaycheckCalculator() {
             <span>Total Hours Worked</span>
             <input
               id="paycheckHoursWorked"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={hoursWorked}
-              onChange={(event) => setHoursWorked(event.target.value)}
+              onChange={(event) => setHoursWorked(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -91,11 +90,10 @@ export default function PaycheckCalculator() {
             <span>Overtime Starts After</span>
             <input
               id="paycheckOvertimeThreshold"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={overtimeThreshold}
-              onChange={(event) => setOvertimeThreshold(event.target.value)}
+              onChange={(event) => setOvertimeThreshold(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -103,11 +101,10 @@ export default function PaycheckCalculator() {
             <span>Overtime Multiplier</span>
             <input
               id="paycheckOvertimeMultiplier"
-              type="number"
-              min="1"
-              step="0.1"
+              type="text"
+              inputMode="decimal"
               value={overtimeMultiplier}
-              onChange={(event) => setOvertimeMultiplier(event.target.value)}
+              onChange={(event) => setOvertimeMultiplier(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -115,12 +112,10 @@ export default function PaycheckCalculator() {
             <span>Estimated Deductions (%)</span>
             <input
               id="paycheckDeductions"
-              type="number"
-              min="0"
-              max="100"
-              step="0.1"
+              type="text"
+              inputMode="decimal"
               value={deductionPercent}
-              onChange={(event) => setDeductionPercent(event.target.value)}
+              onChange={(event) => setDeductionPercent(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -143,13 +138,13 @@ export default function PaycheckCalculator() {
             <>
               <div className="result-card">
                 <span>Estimated Take-Home Pay</span>
-                <strong>${results.netPay}</strong>
+                <strong>{results.netPay}</strong>
               </div>
 
               <dl className="result-list">
                 <div>
                   <dt>Gross pay</dt>
-                  <dd>${results.grossPay}</dd>
+                  <dd>{results.grossPay}</dd>
                 </div>
                 <div>
                   <dt>Regular hours</dt>
@@ -161,20 +156,20 @@ export default function PaycheckCalculator() {
                 </div>
                 <div>
                   <dt>Deductions</dt>
-                  <dd>${results.deductions}</dd>
+                  <dd>{results.deductions}</dd>
                 </div>
                 <div>
                   <dt>Effective gross hourly rate</dt>
-                  <dd>${results.effectiveRate}</dd>
+                  <dd>{results.effectiveRate}</dd>
                 </div>
               </dl>
 
               <div className="summary-panel">
                 Based on <strong>{hoursWorked || "0"}</strong> hours at{" "}
-                <strong>${Number(hourlyRate || 0).toFixed(2)}</strong> per hour,
+                <strong>{formatMoney(parseNumberInput(hourlyRate))}</strong> per hour,
                 your estimated gross pay is{" "}
-                <strong>${results.grossPay}</strong> and your estimated
-                take-home pay is <strong>${results.netPay}</strong>.
+                <strong>{results.grossPay}</strong> and your estimated
+                take-home pay is <strong>{results.netPay}</strong>.
               </div>
 
               <ResultActions resultName="paycheck result" />

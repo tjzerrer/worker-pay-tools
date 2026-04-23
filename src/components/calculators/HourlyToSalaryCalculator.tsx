@@ -1,5 +1,11 @@
 import { useState } from "react";
 import ResultActions from "./ResultActions";
+import {
+  formatMoney,
+  formatNumberInput,
+  formatWholeNumber,
+  parseNumberInput
+} from "./numberFormat";
 
 type Results = {
   annual: string;
@@ -17,20 +23,20 @@ export default function HourlyToSalaryCalculator() {
   const [results, setResults] = useState<Results | null>(null);
 
   function calculate() {
-    const rate = Number(hourlyRate || 0);
-    const weeklyHours = Number(hoursPerWeek || 0);
-    const paidWeeks = Number(weeksPerYear || 0);
-    const workDays = Number(daysPerWeek || 0);
+    const rate = parseNumberInput(hourlyRate);
+    const weeklyHours = parseNumberInput(hoursPerWeek);
+    const paidWeeks = parseNumberInput(weeksPerYear);
+    const workDays = parseNumberInput(daysPerWeek);
     const weeklyPay = rate * weeklyHours;
     const annualPay = weeklyPay * paidWeeks;
     const dailyPay = workDays > 0 ? weeklyPay / workDays : 0;
 
     setResults({
-      annual: annualPay.toFixed(2),
-      monthly: (annualPay / 12).toFixed(2),
-      weekly: weeklyPay.toFixed(2),
-      daily: dailyPay.toFixed(2),
-      hoursPerYear: (weeklyHours * paidWeeks).toFixed(0)
+      annual: formatMoney(annualPay),
+      monthly: formatMoney(annualPay / 12),
+      weekly: formatMoney(weeklyPay),
+      daily: formatMoney(dailyPay),
+      hoursPerYear: formatWholeNumber(weeklyHours * paidWeeks)
     });
   }
 
@@ -57,11 +63,10 @@ export default function HourlyToSalaryCalculator() {
             <span>Hourly Wage ($)</span>
             <input
               id="hourlyWage"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={hourlyRate}
-              onChange={(event) => setHourlyRate(event.target.value)}
+              onChange={(event) => setHourlyRate(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -69,11 +74,10 @@ export default function HourlyToSalaryCalculator() {
             <span>Hours per Week</span>
             <input
               id="hourlyHoursPerWeek"
-              type="number"
-              min="0"
-              step="0.25"
+              type="text"
+              inputMode="decimal"
               value={hoursPerWeek}
-              onChange={(event) => setHoursPerWeek(event.target.value)}
+              onChange={(event) => setHoursPerWeek(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -81,12 +85,10 @@ export default function HourlyToSalaryCalculator() {
             <span>Paid Weeks per Year</span>
             <input
               id="hourlyWeeksPerYear"
-              type="number"
-              min="1"
-              max="52"
-              step="1"
+              type="text"
+              inputMode="decimal"
               value={weeksPerYear}
-              onChange={(event) => setWeeksPerYear(event.target.value)}
+              onChange={(event) => setWeeksPerYear(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -94,12 +96,10 @@ export default function HourlyToSalaryCalculator() {
             <span>Days per Week</span>
             <input
               id="hourlyDaysPerWeek"
-              type="number"
-              min="1"
-              max="7"
-              step="1"
+              type="text"
+              inputMode="decimal"
               value={daysPerWeek}
-              onChange={(event) => setDaysPerWeek(event.target.value)}
+              onChange={(event) => setDaysPerWeek(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -122,21 +122,21 @@ export default function HourlyToSalaryCalculator() {
             <>
               <div className="result-card">
                 <span>Estimated Annual Salary</span>
-                <strong>${results.annual}</strong>
+                <strong>{results.annual}</strong>
               </div>
 
               <dl className="result-list">
                 <div>
                   <dt>Monthly pay</dt>
-                  <dd>${results.monthly}</dd>
+                  <dd>{results.monthly}</dd>
                 </div>
                 <div>
                   <dt>Weekly pay</dt>
-                  <dd>${results.weekly}</dd>
+                  <dd>{results.weekly}</dd>
                 </div>
                 <div>
                   <dt>Daily pay</dt>
-                  <dd>${results.daily}</dd>
+                  <dd>{results.daily}</dd>
                 </div>
                 <div>
                   <dt>Hours per year</dt>
@@ -145,11 +145,11 @@ export default function HourlyToSalaryCalculator() {
               </dl>
 
               <div className="summary-panel">
-                At <strong>${Number(hourlyRate || 0).toFixed(2)}</strong> per
+                At <strong>{formatMoney(parseNumberInput(hourlyRate))}</strong> per
                 hour, working <strong>{hoursPerWeek || "0"}</strong> hours per
                 week for <strong>{weeksPerYear || "0"}</strong> paid weeks
                 gives an estimated annual salary of{" "}
-                <strong>${results.annual}</strong>.
+                <strong>{results.annual}</strong>.
               </div>
 
               <ResultActions resultName="hourly to salary result" />

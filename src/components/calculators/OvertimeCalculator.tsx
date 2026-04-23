@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ResultActions from "./ResultActions";
+import { formatMoney, formatNumber, formatNumberInput, parseNumberInput } from "./numberFormat";
 
 type OvertimeResults = {
   regularHours: string;
@@ -17,10 +18,10 @@ export default function OvertimeCalculator() {
   const [results, setResults] = useState<OvertimeResults | null>(null);
 
   function calculate() {
-    const r = Number(rate || 0);
-    const h = Number(hours || 0);
-    const t = Number(threshold || 40);
-    const m = Number(multiplier || 1.5);
+    const r = parseNumberInput(rate);
+    const h = parseNumberInput(hours);
+    const t = parseNumberInput(threshold) || 40;
+    const m = parseNumberInput(multiplier) || 1.5;
 
     const overtimeHours = Math.max(h - t, 0);
     const regularHours = Math.min(h, t);
@@ -30,11 +31,11 @@ export default function OvertimeCalculator() {
     const totalPay = regularPay + overtimePay;
 
     setResults({
-      regularHours: regularHours.toFixed(2),
-      overtimeHours: overtimeHours.toFixed(2),
-      regularPay: regularPay.toFixed(2),
-      overtimePay: overtimePay.toFixed(2),
-      totalPay: totalPay.toFixed(2)
+      regularHours: formatNumber(regularHours),
+      overtimeHours: formatNumber(overtimeHours),
+      regularPay: formatMoney(regularPay),
+      overtimePay: formatMoney(overtimePay),
+      totalPay: formatMoney(totalPay)
     });
   }
 
@@ -205,11 +206,10 @@ export default function OvertimeCalculator() {
             <input
               id="rate"
               className="ot-input"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={rate}
-              onChange={(e) => setRate(e.target.value)}
+              onChange={(e) => setRate(formatNumberInput(e.target.value))}
             />
           </div>
 
@@ -220,11 +220,10 @@ export default function OvertimeCalculator() {
             <input
               id="hours"
               className="ot-input"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={hours}
-              onChange={(e) => setHours(e.target.value)}
+              onChange={(e) => setHours(formatNumberInput(e.target.value))}
             />
           </div>
 
@@ -235,11 +234,10 @@ export default function OvertimeCalculator() {
             <input
               id="threshold"
               className="ot-input"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={threshold}
-              onChange={(e) => setThreshold(e.target.value)}
+              onChange={(e) => setThreshold(formatNumberInput(e.target.value))}
             />
           </div>
 
@@ -250,11 +248,10 @@ export default function OvertimeCalculator() {
             <input
               id="multiplier"
               className="ot-input"
-              type="number"
-              min="1"
-              step="0.1"
+              type="text"
+              inputMode="decimal"
               value={multiplier}
-              onChange={(e) => setMultiplier(e.target.value)}
+              onChange={(e) => setMultiplier(formatNumberInput(e.target.value))}
             />
           </div>
 
@@ -281,22 +278,22 @@ export default function OvertimeCalculator() {
               <div className="ot-results-top">
                 <div className="ot-stat">
                   <div className="ot-stat-label">Total Estimated Pay</div>
-                  <div className="ot-stat-value">${results.totalPay}</div>
+                  <div className="ot-stat-value">{results.totalPay}</div>
                 </div>
               </div>
 
               <div className="ot-breakdown">
                 <p>Regular Hours: {results.regularHours}</p>
                 <p>Overtime Hours: {results.overtimeHours}</p>
-                <p>Regular Pay: ${results.regularPay}</p>
-                <p>Overtime Pay: ${results.overtimePay}</p>
+                <p>Regular Pay: {results.regularPay}</p>
+                <p>Overtime Pay: {results.overtimePay}</p>
               </div>
 
               <div className="ot-summary">
                 You worked <strong>{results.regularHours}</strong> regular hours and{" "}
                 <strong>{results.overtimeHours}</strong> overtime hours. Based on an hourly
-                rate of <strong>${Number(rate || 0).toFixed(2)}</strong>, your estimated
-                total pay is <strong>${results.totalPay}</strong>.
+                rate of <strong>{formatMoney(parseNumberInput(rate))}</strong>, your estimated
+                total pay is <strong>{results.totalPay}</strong>.
               </div>
 
               <ResultActions resultName="overtime result" />

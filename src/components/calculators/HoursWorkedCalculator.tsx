@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ResultActions from "./ResultActions";
+import { formatNumber, formatNumberInput, parseNumberInput } from "./numberFormat";
 
 export default function HoursWorkedCalculator() {
   const [start, setStart] = useState("");
@@ -33,11 +34,11 @@ export default function HoursWorkedCalculator() {
       isOvernight = true;
     }
 
-    const breakHours = Number(breakMinutes || 0) / 60;
+    const breakHours = parseNumberInput(breakMinutes) / 60;
     const finalHours = Math.max(diff - breakHours, 0);
 
-    setRawHours(diff.toFixed(2));
-    setTotalHours(finalHours.toFixed(2));
+    setRawHours(formatNumber(diff));
+    setTotalHours(formatNumber(finalHours));
     setOvernight(isOvernight);
   }
 
@@ -221,10 +222,10 @@ export default function HoursWorkedCalculator() {
             <input
               id="breakMinutes"
               className="hw-input"
-              type="number"
-              min="0"
+              type="text"
+              inputMode="decimal"
               value={breakMinutes}
-              onChange={(e) => setBreakMinutes(e.target.value)}
+              onChange={(e) => setBreakMinutes(formatNumberInput(e.target.value))}
             />
           </div>
 

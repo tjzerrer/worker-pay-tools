@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import ResultActions from "./ResultActions";
+import { formatMoney, formatNumber, formatNumberInput, parseNumberInput } from "./numberFormat";
 
 type DayEntry = {
   start: string;
@@ -76,7 +77,7 @@ export default function TimeCardCalculator() {
 
       if (diff < 0) diff += 24;
 
-      const breakHours = Number(day.breakMinutes || 0) / 60;
+      const breakHours = parseNumberInput(day.breakMinutes) / 60;
       const finalHours = Math.max(diff - breakHours, 0);
 
       total += finalHours;
@@ -88,19 +89,19 @@ export default function TimeCardCalculator() {
       overtimeRule === "daily8" ? dailyOvertimeTotal : Math.max(total - 40, 0);
     const regularHours =
       overtimeRule === "daily8" ? dailyRegularTotal : Math.min(total, 40);
-    const rate = Number(hourlyRate || 0);
+    const rate = parseNumberInput(hourlyRate);
 
     const regularPay = regularHours * rate;
     const overtimePay = overtimeHours * rate * 1.5;
     const totalPay = regularPay + overtimePay;
 
-    setTotalHours(total.toFixed(2));
-    setGrossPay(totalPay.toFixed(2));
+    setTotalHours(formatNumber(total));
+    setGrossPay(formatMoney(totalPay));
     setBreakdown({
-      regularHours: regularHours.toFixed(2),
-      overtimeHours: overtimeHours.toFixed(2),
-      regularPay: regularPay.toFixed(2),
-      overtimePay: overtimePay.toFixed(2)
+      regularHours: formatNumber(regularHours),
+      overtimeHours: formatNumber(overtimeHours),
+      regularPay: formatMoney(regularPay),
+      overtimePay: formatMoney(overtimePay)
     });
   }
 
@@ -420,10 +421,12 @@ export default function TimeCardCalculator() {
                 <span className="tc-mobile-label">Break (min)</span>
                 <input
                   className="tc-input"
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="decimal"
                   value={day.breakMinutes}
-                  onChange={(e) => updateDay(i, "breakMinutes", e.target.value)}
+                  onChange={(e) =>
+                    updateDay(i, "breakMinutes", formatNumberInput(e.target.value))
+                  }
                   placeholder="0"
                 />
               </div>
@@ -466,11 +469,10 @@ export default function TimeCardCalculator() {
             <input
               id="hourlyRate"
               className="tc-rate-input"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={hourlyRate}
-              onChange={(e) => setHourlyRate(e.target.value)}
+              onChange={(e) => setHourlyRate(formatNumberInput(e.target.value))}
             />
           </div>
 
@@ -529,7 +531,7 @@ export default function TimeCardCalculator() {
 
                 <div className="tc-stat">
                   <div className="tc-stat-label">Estimated Pay</div>
-                  <div className="tc-stat-value">${grossPay}</div>
+                  <div className="tc-stat-value">{grossPay}</div>
                 </div>
               </div>
 
@@ -537,13 +539,13 @@ export default function TimeCardCalculator() {
                 <div className="tc-breakdown">
                   <p>Regular Hours: {breakdown.regularHours}</p>
                   <p>Overtime Hours: {breakdown.overtimeHours}</p>
-                  <p>Regular Pay: ${breakdown.regularPay}</p>
-                  <p>Overtime Pay: ${breakdown.overtimePay}</p>
+                  <p>Regular Pay: {breakdown.regularPay}</p>
+                  <p>Overtime Pay: {breakdown.overtimePay}</p>
                 </div>
               )}
 
               <div className="tc-total-pay">
-                <strong>Total Pay: ${grossPay}</strong>
+                <strong>Total Pay: {grossPay}</strong>
               </div>
 
               {breakdown && (
@@ -552,7 +554,7 @@ export default function TimeCardCalculator() {
                   <strong>{overtimeLabel.toLowerCase()}</strong>, this estimate
                   includes <strong>{breakdown.regularHours}</strong> regular
                   hours and <strong>{breakdown.overtimeHours}</strong> overtime
-                  hours for total gross pay of <strong>${grossPay}</strong>.
+                  hours for total gross pay of <strong>{grossPay}</strong>.
                 </div>
               )}
 

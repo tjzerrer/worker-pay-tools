@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ResultActions from "./ResultActions";
+import { formatMoney, formatNumber, formatNumberInput, parseNumberInput } from "./numberFormat";
 
 type NetPayResults = {
   deductions: string;
@@ -14,18 +15,18 @@ export default function NetPayCalculator() {
   const [results, setResults] = useState<NetPayResults | null>(null);
 
   function calculate() {
-    const gross = Number(grossPay || 0);
-    const percent = Number(deductionPercent || 0);
-    const fixed = Number(fixedDeductions || 0);
+    const gross = parseNumberInput(grossPay);
+    const percent = parseNumberInput(deductionPercent);
+    const fixed = parseNumberInput(fixedDeductions);
     const percentageDeductions = gross * (percent / 100);
     const totalDeductions = Math.max(percentageDeductions + fixed, 0);
     const net = Math.max(gross - totalDeductions, 0);
     const takeHomePercent = gross > 0 ? (net / gross) * 100 : 0;
 
     setResults({
-      deductions: totalDeductions.toFixed(2),
-      netPay: net.toFixed(2),
-      takeHomePercent: takeHomePercent.toFixed(1)
+      deductions: formatMoney(totalDeductions),
+      netPay: formatMoney(net),
+      takeHomePercent: formatNumber(takeHomePercent, 1)
     });
   }
 
@@ -56,11 +57,10 @@ export default function NetPayCalculator() {
             <span>Gross Pay ($)</span>
             <input
               id="netPayGross"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={grossPay}
-              onChange={(event) => setGrossPay(event.target.value)}
+              onChange={(event) => setGrossPay(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -68,12 +68,10 @@ export default function NetPayCalculator() {
             <span>Estimated Deduction Percentage (%)</span>
             <input
               id="netPayPercent"
-              type="number"
-              min="0"
-              max="100"
-              step="0.1"
+              type="text"
+              inputMode="decimal"
               value={deductionPercent}
-              onChange={(event) => setDeductionPercent(event.target.value)}
+              onChange={(event) => setDeductionPercent(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -81,11 +79,10 @@ export default function NetPayCalculator() {
             <span>Additional Fixed Deductions ($)</span>
             <input
               id="netPayFixed"
-              type="number"
-              min="0"
-              step="0.01"
+              type="text"
+              inputMode="decimal"
               value={fixedDeductions}
-              onChange={(event) => setFixedDeductions(event.target.value)}
+              onChange={(event) => setFixedDeductions(formatNumberInput(event.target.value))}
             />
           </label>
 
@@ -108,13 +105,13 @@ export default function NetPayCalculator() {
             <>
               <div className="result-card">
                 <span>Estimated Net Pay</span>
-                <strong>${results.netPay}</strong>
+                <strong>{results.netPay}</strong>
               </div>
 
               <dl className="result-list">
                 <div>
                   <dt>Estimated deductions</dt>
-                  <dd>${results.deductions}</dd>
+                  <dd>{results.deductions}</dd>
                 </div>
                 <div>
                   <dt>Take-home percentage</dt>
@@ -124,11 +121,11 @@ export default function NetPayCalculator() {
 
               <div className="summary-panel">
                 If your gross pay is{" "}
-                <strong>${Number(grossPay || 0).toFixed(2)}</strong> and
+                <strong>{formatMoney(parseNumberInput(grossPay))}</strong> and
                 deductions are{" "}
-                <strong>{Number(deductionPercent || 0).toFixed(1)}%</strong>,
+                <strong>{formatNumber(parseNumberInput(deductionPercent), 1)}%</strong>,
                 your estimated take-home pay is{" "}
-                <strong>${results.netPay}</strong>.
+                <strong>{results.netPay}</strong>.
               </div>
 
               <ResultActions resultName="net pay result" />
