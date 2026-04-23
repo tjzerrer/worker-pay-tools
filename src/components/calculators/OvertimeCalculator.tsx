@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ResultActions from "./ResultActions";
 
 type OvertimeResults = {
   regularHours: string;
@@ -297,6 +298,8 @@ export default function OvertimeCalculator() {
                 rate of <strong>${Number(rate || 0).toFixed(2)}</strong>, your estimated
                 total pay is <strong>${results.totalPay}</strong>.
               </div>
+
+              <ResultActions resultName="overtime result" />
             </>
           )}
         </div>

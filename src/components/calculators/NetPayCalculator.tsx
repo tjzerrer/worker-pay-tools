@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ResultActions from "./ResultActions";
 
 type NetPayResults = {
   deductions: string;
@@ -129,6 +130,8 @@ export default function NetPayCalculator() {
                 your estimated take-home pay is{" "}
                 <strong>${results.netPay}</strong>.
               </div>
+
+              <ResultActions resultName="net pay result" />
             </>
           )}
         </div>

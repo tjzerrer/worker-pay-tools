@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ResultActions from "./ResultActions";
 
 export default function HoursWorkedCalculator() {
   const [start, setStart] = useState("");
@@ -262,6 +263,8 @@ export default function HoursWorkedCalculator() {
                   This shift crosses midnight, so we treated the end time as the next day.
                 </div>
               )}
+
+              <ResultActions resultName="hours worked result" />
             </>
           )}
         </div>

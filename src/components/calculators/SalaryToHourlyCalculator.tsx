@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ResultActions from "./ResultActions";
 
 type Results = {
   hourly: string;
@@ -125,6 +126,8 @@ export default function SalaryToHourlyCalculator() {
                   <dd>{results.hoursPerYear}</dd>
                 </div>
               </dl>
+
+              <ResultActions resultName="salary to hourly result" />
             </>
           )}
         </div>

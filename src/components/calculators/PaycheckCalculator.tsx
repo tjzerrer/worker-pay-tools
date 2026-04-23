@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ResultActions from "./ResultActions";
 
 type Results = {
   regularHours: string;
@@ -167,6 +168,8 @@ export default function PaycheckCalculator() {
                   <dd>${results.effectiveRate}</dd>
                 </div>
               </dl>
+
+              <ResultActions resultName="paycheck result" />
             </>
           )}
         </div>

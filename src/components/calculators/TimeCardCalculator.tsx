@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import ResultActions from "./ResultActions";
 
 type DayEntry = {
   start: string;
@@ -544,6 +545,8 @@ export default function TimeCardCalculator() {
               <div className="tc-total-pay">
                 <strong>Total Pay: ${grossPay}</strong>
               </div>
+
+              <ResultActions resultName="time card result" />
             </>
           )}
         </div>
