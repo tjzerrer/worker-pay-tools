@@ -37,12 +37,6 @@ export default function ResultActions({ resultName }: ResultActionsProps) {
           color: #fff;
         }
 
-        .result-action-pdf {
-          border: 1px solid #d9e2ec;
-          background: #fff;
-          color: #172033;
-        }
-
         @media print {
           .result-actions {
             display: none;
@@ -55,14 +49,7 @@ export default function ResultActions({ resultName }: ResultActionsProps) {
         className="result-action-btn result-action-print"
         onClick={printResult}
       >
-        Print Result
-      </button>
-      <button
-        type="button"
-        className="result-action-btn result-action-pdf"
-        onClick={printResult}
-      >
-        Save as PDF
+        Print or Save as PDF
       </button>
     </div>
   );
