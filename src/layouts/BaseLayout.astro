@@ -281,6 +281,10 @@ const { title, description } = Astro.props;
         font: inherit;
       }
 
+      .compact-field input {
+        max-width: 190px;
+      }
+
       .muted {
         color: var(--muted);
       }
@@ -324,6 +328,15 @@ const { title, description } = Astro.props;
       .result-list dd {
         margin: 0;
         font-weight: 800;
+      }
+
+      .summary-panel {
+        margin-top: 1rem;
+        border: 1px solid #edf2f7;
+        border-radius: 8px;
+        background: #fbfcfd;
+        padding: 0.85rem;
+        line-height: 1.45;
       }
 
       .helper-panel {

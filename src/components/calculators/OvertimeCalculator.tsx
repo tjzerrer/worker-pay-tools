@@ -57,7 +57,8 @@ export default function OvertimeCalculator() {
         }
 
         .ot-card {
-          border: 1px solid #ddd;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 1rem;
           background: #fff;
         }
@@ -89,6 +90,8 @@ export default function OvertimeCalculator() {
           width: 180px;
           max-width: 100%;
           height: 36px;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 0.35rem 0.5rem;
           box-sizing: border-box;
         }
@@ -102,7 +105,8 @@ export default function OvertimeCalculator() {
 
         .ot-primary-btn {
           padding: 0.7rem 1.15rem;
-          background: #333;
+          border-radius: 8px;
+          background: #155e75;
           color: #fff;
           border: none;
           cursor: pointer;
@@ -110,8 +114,9 @@ export default function OvertimeCalculator() {
 
         .ot-secondary-btn {
           padding: 0.7rem 1.15rem;
+          border-radius: 8px;
           background: #f3f3f3;
-          border: 1px solid #ccc;
+          border: 1px solid #d9e2ec;
           cursor: pointer;
         }
 
@@ -128,8 +133,9 @@ export default function OvertimeCalculator() {
         }
 
         .ot-stat {
-          border: 1px solid #e5e5e5;
-          background: #fafafa;
+          border: 1px solid #cfe3dc;
+          border-radius: 8px;
+          background: #eef5f2;
           padding: 0.85rem;
         }
 
@@ -142,6 +148,7 @@ export default function OvertimeCalculator() {
         .ot-stat-value {
           font-size: 1.2rem;
           font-weight: 700;
+          color: #18794e;
         }
 
         .ot-breakdown p {
@@ -151,14 +158,16 @@ export default function OvertimeCalculator() {
         .ot-summary {
           margin-top: 1rem;
           padding: 0.85rem;
+          border-radius: 8px;
           background: #fafafa;
-          border: 1px solid #e5e5e5;
+          border: 1px solid #d9e2ec;
           line-height: 1.45;
         }
 
         .ot-helper {
           margin-top: 2rem;
-          border: 1px solid #ddd;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 1rem;
           background: #fafafa;
         }

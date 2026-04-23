@@ -145,9 +145,14 @@ export const guides: Guide[] = [
     description:
       "Understanding the difference between gross pay and net pay helps you know what you earn versus what you actually take home.",
     category: "worker-pay",
-    relatedToolSlugs: ["paycheck-calculator", "overtime-calculator", "time-card-calculator"],
+    relatedToolSlugs: [
+      "net-pay-estimator",
+      "paycheck-calculator",
+      "overtime-calculator",
+      "time-card-calculator"
+    ],
     calculatorPrompt:
-      "Use the paycheck calculator to compare gross pay with a simple take-home estimate after taxes and deductions.",
+      "Use the net pay estimator to compare gross pay with a simple take-home estimate after taxes and deductions.",
     sections: [
       {
         heading: "What Is Gross Pay?",
@@ -199,6 +204,7 @@ export const guides: Guide[] = [
           "For a more accurate estimate, use the paycheck calculator. If you need to estimate weekly hours first, start with the time card calculator. If your weekly hours are over 40, the overtime calculator can help estimate gross pay before deductions."
         ],
         toolSlugs: [
+          "net-pay-estimator",
           "paycheck-calculator",
           "time-card-calculator",
           "overtime-calculator"

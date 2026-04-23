@@ -18,7 +18,8 @@ export const tools: Tool[] = [
     relatedToolSlugs: [
       "hours-worked-calculator",
       "overtime-calculator",
-      "paycheck-calculator"
+      "paycheck-calculator",
+      "net-pay-estimator"
     ],
     relatedGuideSlugs: ["how-to-calculate-work-hours"]
   },
@@ -28,7 +29,7 @@ export const tools: Tool[] = [
     description: "Find the number of hours between a start time and end time.",
     category: "worker-pay",
     keywords: ["hours worked calculator", "hours between times"],
-    relatedToolSlugs: ["time-card-calculator", "overtime-calculator"],
+    relatedToolSlugs: ["time-card-calculator", "overtime-calculator", "net-pay-estimator"],
     relatedGuideSlugs: ["how-to-calculate-work-hours"]
   },
   {
@@ -40,7 +41,8 @@ export const tools: Tool[] = [
     relatedToolSlugs: [
       "time-card-calculator",
       "hours-worked-calculator",
-      "paycheck-calculator"
+      "paycheck-calculator",
+      "net-pay-estimator"
     ],
     relatedGuideSlugs: ["how-overtime-pay-works"]
   },
@@ -50,7 +52,11 @@ export const tools: Tool[] = [
     description: "Convert an annual salary into an hourly wage.",
     category: "worker-pay",
     keywords: ["salary to hourly calculator", "annual salary to hourly"],
-    relatedToolSlugs: ["hourly-to-salary-calculator", "paycheck-calculator"],
+    relatedToolSlugs: [
+      "hourly-to-salary-calculator",
+      "paycheck-calculator",
+      "net-pay-estimator"
+    ],
     relatedGuideSlugs: ["salary-vs-hourly-pay"]
   },
   {
@@ -59,7 +65,11 @@ export const tools: Tool[] = [
     description: "Convert an hourly wage into an annual salary estimate.",
     category: "worker-pay",
     keywords: ["hourly to salary calculator", "hourly wage to annual salary"],
-    relatedToolSlugs: ["salary-to-hourly-calculator", "paycheck-calculator"],
+    relatedToolSlugs: [
+      "salary-to-hourly-calculator",
+      "paycheck-calculator",
+      "net-pay-estimator"
+    ],
     relatedGuideSlugs: ["salary-vs-hourly-pay"]
   },
   {
@@ -71,7 +81,21 @@ export const tools: Tool[] = [
     relatedToolSlugs: [
       "time-card-calculator",
       "overtime-calculator",
-      "salary-to-hourly-calculator"
+      "salary-to-hourly-calculator",
+      "net-pay-estimator"
+    ],
+    relatedGuideSlugs: ["gross-pay-vs-net-pay"]
+  },
+  {
+    slug: "net-pay-estimator",
+    title: "Net Pay Estimator",
+    description: "Estimate take-home pay after percentage and fixed deductions.",
+    category: "worker-pay",
+    keywords: ["net pay calculator", "take home pay calculator", "deduction calculator"],
+    relatedToolSlugs: [
+      "paycheck-calculator",
+      "overtime-calculator",
+      "time-card-calculator"
     ],
     relatedGuideSlugs: ["gross-pay-vs-net-pay"]
   }

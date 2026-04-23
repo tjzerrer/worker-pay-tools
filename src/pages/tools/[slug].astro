@@ -8,6 +8,7 @@ import OvertimeCalculator from "../../components/calculators/OvertimeCalculator"
 import SalaryToHourlyCalculator from "../../components/calculators/SalaryToHourlyCalculator";
 import HourlyToSalaryCalculator from "../../components/calculators/HourlyToSalaryCalculator";
 import PaycheckCalculator from "../../components/calculators/PaycheckCalculator";
+import NetPayCalculator from "../../components/calculators/NetPayCalculator";
 import { tools } from "../../data/tools";
 
 export function getStaticPaths() {
@@ -35,6 +36,8 @@ const { tool } = Astro.props;
   {tool.slug === "hourly-to-salary-calculator" && <HourlyToSalaryCalculator client:load />}
 
   {tool.slug === "paycheck-calculator" && <PaycheckCalculator client:load />}
+
+  {tool.slug === "net-pay-estimator" && <NetPayCalculator client:load />}
 
   <RelatedTools currentSlug={tool.slug} />
   <RelatedGuides currentSlug={tool.slug} />

@@ -52,7 +52,8 @@ export default function HoursWorkedCalculator() {
         }
 
         .hw-card {
-          border: 1px solid #ddd;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 1rem;
           background: #fff;
         }
@@ -84,6 +85,8 @@ export default function HoursWorkedCalculator() {
           width: 100%;
           max-width: 260px;
           height: 36px;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 0.35rem 0.5rem;
           box-sizing: border-box;
         }
@@ -97,7 +100,8 @@ export default function HoursWorkedCalculator() {
 
         .hw-primary-btn {
           padding: 0.7rem 1.15rem;
-          background: #333;
+          border-radius: 8px;
+          background: #155e75;
           color: #fff;
           border: none;
           cursor: pointer;
@@ -105,8 +109,9 @@ export default function HoursWorkedCalculator() {
 
         .hw-secondary-btn {
           padding: 0.7rem 1.15rem;
+          border-radius: 8px;
           background: #f3f3f3;
-          border: 1px solid #ccc;
+          border: 1px solid #d9e2ec;
           cursor: pointer;
         }
 
@@ -123,8 +128,9 @@ export default function HoursWorkedCalculator() {
         }
 
         .hw-stat {
-          border: 1px solid #e5e5e5;
-          background: #fafafa;
+          border: 1px solid #cfe3dc;
+          border-radius: 8px;
+          background: #eef5f2;
           padding: 0.85rem;
         }
 
@@ -137,18 +143,21 @@ export default function HoursWorkedCalculator() {
         .hw-stat-value {
           font-size: 1.2rem;
           font-weight: 700;
+          color: #18794e;
         }
 
         .hw-note {
           margin-top: 1rem;
           padding: 0.75rem;
+          border-radius: 8px;
           background: #fafafa;
-          border: 1px solid #e5e5e5;
+          border: 1px solid #d9e2ec;
         }
 
         .hw-helper {
           margin-top: 2rem;
-          border: 1px solid #ddd;
+          border: 1px solid #d9e2ec;
+          border-radius: 8px;
           padding: 1rem;
           background: #fafafa;
         }
