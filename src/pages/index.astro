@@ -8,28 +8,49 @@ import { guides } from "../data/guides";
   title="Worker Pay Tools"
   description="Simple calculators for work hours, overtime, salary conversions, and paycheck estimates."
 >
-  <h1>Worker Pay Tools</h1>
-  <p>Simple calculators and guides for time cards, overtime, salary conversions, and paycheck estimates.</p>
+  <section class="hero">
+    <div class="hero-copy">
+      <h1>Worker Pay Tools</h1>
+      <p>
+        Fast calculators for shifts, overtime, hourly wages, salary comparisons,
+        and rough paycheck estimates. Built for quick checks before payday.
+      </p>
+    </div>
+  </section>
 
-  <section>
-    <h2>Tools</h2>
-    <ul>
+  <section id="tools" aria-labelledby="tools-heading">
+    <div class="section-heading">
+      <div>
+        <h2 id="tools-heading">Calculators</h2>
+        <p>Pick the calculator that matches the pay question in front of you.</p>
+      </div>
+    </div>
+
+    <ul class="resource-list">
       {tools.map((tool) => (
         <li>
-          <a href={`/tools/${tool.slug}/`}>{tool.title}</a> — {tool.description}
+          <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+          <p>{tool.description}</p>
         </li>
       ))}
     </ul>
   </section>
 
-  <section>
-    <h2>Guides</h2>
-    <ul>
+  <section id="guides" aria-labelledby="guides-heading" style="margin-top: 3rem;">
+    <div class="section-heading">
+      <div>
+        <h2 id="guides-heading">Guides</h2>
+        <p>Short explainers for the math behind the tools.</p>
+      </div>
+    </div>
+
+    <ul class="resource-list">
       {guides.map((guide) => (
         <li>
-          <a href={`/guides/${guide.slug}/`}>{guide.title}</a> — {guide.description}
+          <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
+          <p>{guide.description}</p>
         </li>
       ))}
     </ul>
-    </section>
+  </section>
 </BaseLayout>

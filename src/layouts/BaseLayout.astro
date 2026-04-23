@@ -1,5 +1,6 @@
 ---
-import Analytics from '@vercel/analytics/astro';
+import Analytics from "@vercel/analytics/astro";
+import { site } from "../data/site";
 
 interface Props {
   title: string;
@@ -19,11 +20,17 @@ const { title, description } = Astro.props;
     <link rel="icon" href="/favicon.ico" />
     <style>
       :root {
-        --border: #dddddd;
-        --text: #1f2937;
-        --muted: #555;
-        --bg: #ffffff;
-        --soft: #f8f8f8;
+        --border: #d9e2ec;
+        --text: #172033;
+        --muted: #586575;
+        --bg: #f7fafc;
+        --surface: #ffffff;
+        --soft: #eef5f2;
+        --brand: #155e75;
+        --brand-dark: #0f3f4e;
+        --accent: #b45309;
+        --ok: #18794e;
+        --shadow: 0 14px 35px rgba(23, 32, 51, 0.08);
       }
 
       * {
@@ -32,49 +39,407 @@ const { title, description } = Astro.props;
 
       body {
         margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
         color: var(--text);
         background: var(--bg);
         line-height: 1.5;
       }
 
       a {
-        color: #1d4ed8;
+        color: var(--brand);
+        text-underline-offset: 0.18em;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        overflow-wrap: anywhere;
+      }
+
+      h1 {
+        margin: 0 0 1rem;
+        max-width: 780px;
+        font-size: clamp(2.4rem, 4vw, 4.6rem);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin-top: 0;
+        font-size: 1.55rem;
+      }
+
+      h3 {
+        font-size: 1.05rem;
       }
 
       .site-header {
         border-bottom: 1px solid var(--border);
-        background: #fff;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 10;
       }
 
       .site-header-inner {
         max-width: 1100px;
         margin: 0 auto;
         padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
 
       .site-brand {
-        font-size: 1.3rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 1.05rem;
         font-weight: 700;
-        color: #1d4ed8;
+        color: var(--text);
         text-decoration: none;
       }
 
+      .site-brand-mark {
+        display: inline-grid;
+        width: 2rem;
+        height: 2rem;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
       .site-brand:hover {
-        text-decoration: underline;
+        color: var(--brand);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        font-size: 0.94rem;
+      }
+
+      .site-nav a {
+        color: var(--muted);
+        font-weight: 650;
+        text-decoration: none;
+      }
+
+      .site-nav a:hover {
+        color: var(--brand);
       }
 
       .page-wrap {
         max-width: 1100px;
         margin: 0 auto;
-        padding: 2rem 1.25rem 3rem;
+        padding: 3rem 1.25rem 4rem;
+      }
+
+      .hero {
+        max-width: 820px;
+        padding: 1rem 0 2.5rem;
+      }
+
+      .hero-copy p {
+        max-width: 660px;
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+        font-size: 1.12rem;
+      }
+
+      .calc-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .primary-button,
+      .secondary-button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        padding: 0.72rem 1rem;
+        border: 1px solid transparent;
+        font: inherit;
+        font-weight: 750;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .primary-button {
+        background: var(--brand);
+        color: #fff;
+      }
+
+      .primary-button:hover {
+        background: var(--brand-dark);
+        color: #fff;
+      }
+
+      .secondary-button {
+        background: #fff;
+        border-color: var(--border);
+        color: var(--text);
+      }
+
+      .secondary-button:hover {
+        border-color: var(--brand);
+        color: var(--brand);
+      }
+
+      .section-heading {
+        margin: 0 0 1rem;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .section-heading p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .resource-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .resource-list li {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1rem;
+        background: var(--surface);
+        box-shadow: 0 8px 20px rgba(23, 32, 51, 0.04);
+      }
+
+      .resource-list a {
+        font-weight: 800;
+      }
+
+      .resource-list p {
+        margin: 0.45rem 0 0;
+        color: var(--muted);
+      }
+
+      .calculator-block {
+        margin: 2rem 0;
+      }
+
+      .calc-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.86fr);
+        gap: 1rem;
+        align-items: start;
+        margin-top: 1.35rem;
+      }
+
+      .calc-panel,
+      .helper-panel,
+      .related-panel {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 1rem;
+      }
+
+      .calc-panel h3,
+      .helper-panel h3,
+      .related-panel h2 {
+        margin-top: 0;
+      }
+
+      .calc-field {
+        display: grid;
+        gap: 0.35rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .calc-field input {
+        width: 100%;
+        max-width: 280px;
+        min-height: 40px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.45rem 0.55rem;
+        font: inherit;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .result-card {
+        display: grid;
+        gap: 0.35rem;
+        border: 1px solid #cfe3dc;
+        border-radius: 8px;
+        background: var(--soft);
+        padding: 1rem;
+      }
+
+      .result-card span {
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .result-card strong {
+        color: var(--ok);
+        font-size: 1.65rem;
+      }
+
+      .result-list {
+        margin: 1rem 0 0;
+      }
+
+      .result-list div {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid #edf2f7;
+      }
+
+      .result-list dt {
+        color: var(--muted);
+      }
+
+      .result-list dd {
+        margin: 0;
+        font-weight: 800;
+      }
+
+      .helper-panel {
+        margin-top: 1rem;
+      }
+
+      .related-panel {
+        margin-top: 1.25rem;
+      }
+
+      .related-panel ul {
+        margin-bottom: 0;
+      }
+
+      .guide-article {
+        max-width: 850px;
+      }
+
+      .guide-article > p {
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .guide-section {
+        margin-bottom: 2rem;
+      }
+
+      .guide-section p {
+        line-height: 1.7;
+      }
+
+      .guide-section li {
+        margin-bottom: 0.4rem;
+      }
+
+      .guide-example {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        padding: 0.85rem;
+        font-weight: 750;
+      }
+
+      .guide-tool-links {
+        margin-top: 1rem;
+        border-top: 1px solid var(--border);
+        padding-top: 1rem;
+      }
+
+      .guide-tool-links ul {
+        margin-bottom: 0;
+      }
+
+      .guide-calculator-callout {
+        margin: 0 0 2rem;
+        border-left: 4px solid var(--brand);
+        border-radius: 8px;
+        background: var(--soft);
+        padding: 1rem;
+      }
+
+      .guide-calculator-callout p {
+        margin-top: 0;
+      }
+
+      .guide-calculator-callout a {
+        font-weight: 800;
+      }
+
+      @media (max-width: 860px) {
+        .calc-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .resource-list {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .site-header-inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .page-wrap {
+          padding-top: 2rem;
+        }
+
+        .section-heading {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .primary-button,
+        .secondary-button {
+          width: 100%;
+        }
+
+        .calc-field input {
+          max-width: none;
+        }
       }
     </style>
   </head>
   <body>
     <header class="site-header">
       <div class="site-header-inner">
-        <a class="site-brand" href="/">Time and Pay Tools</a>
+        <a class="site-brand" href="/">
+          <span class="site-brand-mark">WP</span>
+          <span>{site.name}</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="/#tools">Tools</a>
+          <a href="/#guides">Guides</a>
+        </nav>
       </div>
     </header>
 
@@ -82,7 +447,6 @@ const { title, description } = Astro.props;
       <slot />
     </main>
 
-    <!-- ✅ Vercel Analytics -->
     <Analytics />
   </body>
 </html>

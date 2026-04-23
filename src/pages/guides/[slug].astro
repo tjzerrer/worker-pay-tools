@@ -15,35 +15,61 @@ const { guide } = Astro.props;
 const relatedTools = guide.relatedToolSlugs
   ? tools.filter((tool) => guide.relatedToolSlugs?.includes(tool.slug))
   : [];
+
+const primaryTool = relatedTools[0];
+
+function findTools(slugs: string[] = []) {
+  return tools.filter((tool) => slugs.includes(tool.slug));
+}
 ---
 
 <GuideLayout guide={guide}>
-  <article style="max-width: 850px;">
-    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">{guide.title}</h1>
-    <p style="font-size: 1.1rem; color: #555; margin-bottom: 2rem;">
-      {guide.description}
-    </p>
+  <article class="guide-article">
+    <h1>{guide.title}</h1>
+    <p>{guide.description}</p>
 
-    {guide.sections?.map((section) => (
-      <section style="margin-bottom: 2rem;">
-        <h2 style="margin-bottom: 0.75rem;">{section.heading}</h2>
-        {section.paragraphs.map((paragraph) => (
-          <p style="margin-bottom: 1rem; line-height: 1.7;">{paragraph}</p>
-        ))}
-      </section>
+    {guide.sections?.map((section, index) => (
+      <>
+        <section class="guide-section">
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.bullets && (
+            <ul>
+              {section.bullets.map((bullet) => (
+                <li>{bullet}</li>
+              ))}
+            </ul>
+          )}
+          {section.example && <p class="guide-example">{section.example}</p>}
+          {section.toolSlugs && (
+            <div class="guide-tool-links">
+              <strong>Helpful calculators:</strong>
+              <ul>
+                {findTools(section.toolSlugs).map((tool) => (
+                  <li>
+                    <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
+        {index === 0 && primaryTool && guide.calculatorPrompt && (
+          <aside class="guide-calculator-callout">
+            <p>{guide.calculatorPrompt}</p>
+            <a href={`/tools/${primaryTool.slug}/`}>{primaryTool.title}</a>
+          </aside>
+        )}
+      </>
     ))}
 
     {relatedTools.length > 0 && (
-      <section
-        style="
-          margin-top: 2.5rem;
-          border: 1px solid #ddd;
-          padding: 1rem;
-          background: #fafafa;
-        "
-      >
-        <h2 style="margin-top: 0;">Related Tools</h2>
-        <ul style="margin-bottom: 0;">
+      <section class="related-panel">
+        <h2>Related Tools</h2>
+        <ul>
           {relatedTools.map((tool) => (
             <li>
               <a href={`/tools/${tool.slug}/`}>{tool.title}</a>

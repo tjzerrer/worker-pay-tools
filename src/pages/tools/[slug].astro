@@ -5,6 +5,9 @@ import RelatedGuides from "../../components/RelatedGuides.astro";
 import HoursWorkedCalculator from "../../components/calculators/HoursWorkedCalculator";
 import TimeCardCalculator from "../../components/calculators/TimeCardCalculator";
 import OvertimeCalculator from "../../components/calculators/OvertimeCalculator";
+import SalaryToHourlyCalculator from "../../components/calculators/SalaryToHourlyCalculator";
+import HourlyToSalaryCalculator from "../../components/calculators/HourlyToSalaryCalculator";
+import PaycheckCalculator from "../../components/calculators/PaycheckCalculator";
 import { tools } from "../../data/tools";
 
 export function getStaticPaths() {
@@ -27,13 +30,11 @@ const { tool } = Astro.props;
 
   {tool.slug === "overtime-calculator" && <OvertimeCalculator client:load />}
 
-  {tool.slug !== "hours-worked-calculator" &&
-    tool.slug !== "time-card-calculator" &&
-    tool.slug !== "overtime-calculator" && (
-      <div style="padding: 1rem; border: 1px solid #ccc; margin: 2rem 0;">
-        <p>Calculator UI for <strong>{tool.title}</strong> goes here.</p>
-      </div>
-  )}
+  {tool.slug === "salary-to-hourly-calculator" && <SalaryToHourlyCalculator client:load />}
+
+  {tool.slug === "hourly-to-salary-calculator" && <HourlyToSalaryCalculator client:load />}
+
+  {tool.slug === "paycheck-calculator" && <PaycheckCalculator client:load />}
 
   <RelatedTools currentSlug={tool.slug} />
   <RelatedGuides currentSlug={tool.slug} />
