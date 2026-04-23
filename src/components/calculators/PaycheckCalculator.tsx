@@ -169,6 +169,14 @@ export default function PaycheckCalculator() {
                 </div>
               </dl>
 
+              <div className="summary-panel">
+                Based on <strong>{hoursWorked || "0"}</strong> hours at{" "}
+                <strong>${Number(hourlyRate || 0).toFixed(2)}</strong> per hour,
+                your estimated gross pay is{" "}
+                <strong>${results.grossPay}</strong> and your estimated
+                take-home pay is <strong>${results.netPay}</strong>.
+              </div>
+
               <ResultActions resultName="paycheck result" />
             </>
           )}

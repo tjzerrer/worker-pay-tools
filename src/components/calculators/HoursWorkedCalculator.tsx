@@ -258,6 +258,13 @@ export default function HoursWorkedCalculator() {
               <p>Time between start and end: {rawHours} hours</p>
               <p>Break deducted: {breakMinutes || "0"} minutes</p>
 
+              <div className="summary-panel">
+                Your shift was <strong>{rawHours}</strong> hours before breaks,
+                and after subtracting <strong>{breakMinutes || "0"}</strong>{" "}
+                break minutes, your paid time is{" "}
+                <strong>{totalHours}</strong> hours.
+              </div>
+
               {overnight && (
                 <div className="hw-note">
                   This shift crosses midnight, so we treated the end time as the next day.

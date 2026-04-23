@@ -144,6 +144,14 @@ export default function HourlyToSalaryCalculator() {
                 </div>
               </dl>
 
+              <div className="summary-panel">
+                At <strong>${Number(hourlyRate || 0).toFixed(2)}</strong> per
+                hour, working <strong>{hoursPerWeek || "0"}</strong> hours per
+                week for <strong>{weeksPerYear || "0"}</strong> paid weeks
+                gives an estimated annual salary of{" "}
+                <strong>${results.annual}</strong>.
+              </div>
+
               <ResultActions resultName="hourly to salary result" />
             </>
           )}

@@ -546,6 +546,16 @@ export default function TimeCardCalculator() {
                 <strong>Total Pay: ${grossPay}</strong>
               </div>
 
+              {breakdown && (
+                <div className="summary-panel">
+                  You entered <strong>{totalHours}</strong> total hours. Using{" "}
+                  <strong>{overtimeLabel.toLowerCase()}</strong>, this estimate
+                  includes <strong>{breakdown.regularHours}</strong> regular
+                  hours and <strong>{breakdown.overtimeHours}</strong> overtime
+                  hours for total gross pay of <strong>${grossPay}</strong>.
+                </div>
+              )}
+
               <ResultActions resultName="time card result" />
             </>
           )}

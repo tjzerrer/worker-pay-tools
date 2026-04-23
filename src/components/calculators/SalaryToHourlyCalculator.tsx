@@ -127,6 +127,13 @@ export default function SalaryToHourlyCalculator() {
                 </div>
               </dl>
 
+              <div className="summary-panel">
+                An annual salary of <strong>${results.annual}</strong> works out
+                to about <strong>${results.hourly}</strong> per hour when spread
+                across <strong>{results.hoursPerYear}</strong> paid work hours
+                per year.
+              </div>
+
               <ResultActions resultName="salary to hourly result" />
             </>
           )}
