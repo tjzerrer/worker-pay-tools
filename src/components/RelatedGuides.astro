@@ -21,7 +21,7 @@ const relatedGuides = currentTool?.relatedGuideSlugs
     <ul>
       {relatedGuides.map((guide) => (
         <li>
-          <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
+          <a class="related-card-link" href={`/guides/${guide.slug}/`}>{guide.title}</a>
         </li>
       ))}
     </ul>

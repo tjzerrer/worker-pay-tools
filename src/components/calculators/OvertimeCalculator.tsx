@@ -59,10 +59,12 @@ export default function OvertimeCalculator() {
         }
 
         .ot-card {
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 1rem;
-          background: #fff;
+          border: 1px solid rgba(216, 226, 239, 0.94);
+          border-radius: 18px;
+          padding: 1.15rem;
+          background: rgba(255, 255, 255, 0.82);
+          box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+          backdrop-filter: blur(12px);
         }
 
         .ot-heading {
@@ -91,11 +93,13 @@ export default function OvertimeCalculator() {
         .ot-input {
           width: 180px;
           max-width: 100%;
-          height: 36px;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 0.35rem 0.5rem;
+          height: 40px;
+          border: 1px solid rgba(195, 210, 227, 0.96);
+          border-radius: 12px;
+          background: rgba(247, 250, 253, 0.92);
+          padding: 0.45rem 0.65rem;
           box-sizing: border-box;
+          color: #0f172a;
         }
 
         .ot-actions {
@@ -106,19 +110,20 @@ export default function OvertimeCalculator() {
         }
 
         .ot-primary-btn {
-          padding: 0.7rem 1.15rem;
-          border-radius: 8px;
-          background: #155e75;
+          padding: 0.78rem 1.15rem;
+          border-radius: 999px;
+          background: #0f766e;
           color: #fff;
           border: none;
           cursor: pointer;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
 
         .ot-secondary-btn {
-          padding: 0.7rem 1.15rem;
-          border-radius: 8px;
-          background: #f3f3f3;
-          border: 1px solid #d9e2ec;
+          padding: 0.78rem 1.15rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid rgba(195, 210, 227, 0.98);
           cursor: pointer;
         }
 
@@ -135,10 +140,10 @@ export default function OvertimeCalculator() {
         }
 
         .ot-stat {
-          border: 1px solid #cfe3dc;
-          border-radius: 8px;
-          background: #eef5f2;
-          padding: 0.85rem;
+          border: 1px solid rgba(187, 230, 213, 0.98);
+          border-radius: 18px;
+          background: linear-gradient(180deg, rgba(241, 252, 248, 0.96), rgba(236, 249, 244, 0.88));
+          padding: 1rem;
         }
 
         .ot-stat-label {
@@ -159,19 +164,20 @@ export default function OvertimeCalculator() {
 
         .ot-summary {
           margin-top: 1rem;
-          padding: 0.85rem;
-          border-radius: 8px;
-          background: #fafafa;
-          border: 1px solid #d9e2ec;
-          line-height: 1.45;
+          padding: 0.95rem;
+          border-radius: 12px;
+          background: rgba(249, 251, 254, 0.92);
+          border: 1px solid rgba(216, 226, 239, 0.94);
+          line-height: 1.55;
         }
 
         .ot-helper {
           margin-top: 2rem;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 1rem;
-          background: #fafafa;
+          border: 1px solid rgba(216, 226, 239, 0.94);
+          border-radius: 18px;
+          padding: 1.15rem;
+          background: rgba(255, 255, 255, 0.78);
+          box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
         }
 
         .ot-helper h3 {

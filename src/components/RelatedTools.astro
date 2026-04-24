@@ -20,7 +20,7 @@ const relatedTools = currentTool
     <ul>
       {relatedTools.map((tool) => (
         <li>
-          <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+          <a class="related-card-link" href={`/tools/${tool.slug}/`}>{tool.title}</a>
         </li>
       ))}
     </ul>

@@ -22,8 +22,11 @@ const { tool } = Astro.props;
 ---
 
 <ToolLayout tool={tool}>
-  <h1>{tool.title}</h1>
-  <p>{tool.description}</p>
+  <section class="tool-page-intro">
+    <p class="tool-page-kicker">Calculator</p>
+    <h1>{tool.title}</h1>
+    <p>{tool.description}</p>
+  </section>
 
   {tool.slug === "hours-worked-calculator" && <HoursWorkedCalculator client:load />}
 

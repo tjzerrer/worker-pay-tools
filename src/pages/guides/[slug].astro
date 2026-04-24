@@ -29,8 +29,11 @@ function findTools(slugs: string[] = []) {
 
 <GuideLayout guide={guide}>
   <article class="guide-article">
-    <h1>{guide.title}</h1>
-    <p>{guide.description}</p>
+    <section class="guide-page-intro">
+      <p class="guide-page-kicker">Guides</p>
+      <h1>{guide.title}</h1>
+      <p>{guide.description}</p>
+    </section>
 
     {guide.sections?.map((section, index) => (
       <>
@@ -53,7 +56,9 @@ function findTools(slugs: string[] = []) {
               <ul>
                 {findTools(section.toolSlugs).map((tool) => (
                   <li>
-                    <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+                    <a class="guide-tool-card-link" href={`/tools/${tool.slug}/`}>
+                      {tool.title}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -76,7 +81,7 @@ function findTools(slugs: string[] = []) {
         <ul>
           {relatedTools.map((tool) => (
             <li>
-              <a href={`/tools/${tool.slug}/`}>{tool.title}</a>
+              <a class="related-card-link" href={`/tools/${tool.slug}/`}>{tool.title}</a>
             </li>
           ))}
         </ul>

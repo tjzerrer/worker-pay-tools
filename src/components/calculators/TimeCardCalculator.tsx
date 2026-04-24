@@ -127,10 +127,12 @@ export default function TimeCardCalculator() {
         }
 
         .tc-card {
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 1rem;
-          background: #fff;
+          border: 1px solid rgba(216, 226, 239, 0.94);
+          border-radius: 18px;
+          padding: 1.15rem;
+          background: rgba(255, 255, 255, 0.82);
+          box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+          backdrop-filter: blur(12px);
         }
 
         .tc-heading {
@@ -171,19 +173,21 @@ export default function TimeCardCalculator() {
         .tc-input {
           width: 100%;
           box-sizing: border-box;
-          height: 34px;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 0.3rem 0.45rem;
+          height: 40px;
+          border: 1px solid rgba(195, 210, 227, 0.96);
+          border-radius: 12px;
+          background: rgba(247, 250, 253, 0.92);
+          padding: 0.45rem 0.6rem;
+          color: #0f172a;
         }
 
         .tc-remove {
-          width: 30px;
-          height: 30px;
+          width: 34px;
+          height: 34px;
           padding: 0;
-          border-radius: 8px;
-          background: #f3f3f3;
-          border: 1px solid #d9e2ec;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid rgba(195, 210, 227, 0.98);
           cursor: pointer;
           line-height: 1;
         }
@@ -201,21 +205,22 @@ export default function TimeCardCalculator() {
         }
 
         .tc-secondary-btn {
-          padding: 0.6rem 1rem;
-          border-radius: 8px;
-          background: #f3f3f3;
-          border: 1px solid #d9e2ec;
+          padding: 0.72rem 1rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid rgba(195, 210, 227, 0.98);
           cursor: pointer;
         }
 
         .tc-primary-btn {
           margin-top: 1rem;
-          padding: 0.7rem 1.15rem;
-          border-radius: 8px;
-          background: #155e75;
+          padding: 0.78rem 1.15rem;
+          border-radius: 999px;
+          background: #0f766e;
           color: #fff;
           border: none;
           cursor: pointer;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
 
         .tc-field {
@@ -248,11 +253,13 @@ export default function TimeCardCalculator() {
           margin-top: 0.35rem;
           width: 140px;
           max-width: 100%;
-          height: 36px;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 0.35rem 0.5rem;
+          height: 40px;
+          border: 1px solid rgba(195, 210, 227, 0.96);
+          border-radius: 12px;
+          background: rgba(247, 250, 253, 0.92);
+          padding: 0.45rem 0.65rem;
           box-sizing: border-box;
+          color: #0f172a;
         }
 
         .tc-results-empty {
@@ -268,10 +275,10 @@ export default function TimeCardCalculator() {
         }
 
         .tc-stat {
-          border: 1px solid #cfe3dc;
-          border-radius: 8px;
-          background: #eef5f2;
-          padding: 0.8rem;
+          border: 1px solid rgba(187, 230, 213, 0.98);
+          border-radius: 18px;
+          background: linear-gradient(180deg, rgba(241, 252, 248, 0.96), rgba(236, 249, 244, 0.88));
+          padding: 0.95rem;
         }
 
         .tc-stat-label {
@@ -299,10 +306,11 @@ export default function TimeCardCalculator() {
 
         .tc-helper {
           margin-top: 2rem;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          padding: 1rem;
-          background: #fafafa;
+          border: 1px solid rgba(216, 226, 239, 0.94);
+          border-radius: 18px;
+          padding: 1.15rem;
+          background: rgba(255, 255, 255, 0.78);
+          box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
         }
 
         .tc-helper h3 {
@@ -319,10 +327,10 @@ export default function TimeCardCalculator() {
 
         .tc-badge {
           display: inline-block;
-          padding: 0.25rem 0.55rem;
-          border: 1px solid #d9e2ec;
-          border-radius: 8px;
-          background: #f8f8f8;
+          padding: 0.34rem 0.65rem;
+          border: 1px solid rgba(195, 210, 227, 0.98);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.88);
           font-size: 0.85rem;
         }
 
@@ -340,11 +348,11 @@ export default function TimeCardCalculator() {
           .tc-grid-row {
             grid-template-columns: 1fr;
             gap: 0.45rem;
-            border: 1px solid #d9e2ec;
-            border-radius: 8px;
+            border: 1px solid rgba(216, 226, 239, 0.94);
+            border-radius: 16px;
             padding: 0.75rem;
             margin-bottom: 0.85rem;
-            background: #fcfcfc;
+            background: rgba(255, 255, 255, 0.84);
           }
 
           .tc-mobile-label {
