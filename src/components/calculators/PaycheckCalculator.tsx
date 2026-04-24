@@ -56,8 +56,8 @@ export default function PaycheckCalculator() {
     <div className="calculator-block">
       <h2>Paycheck Calculator</h2>
       <p>
-        Estimate gross pay and a simple take-home amount from hours, hourly rate, overtime,
-        and deductions.
+        Estimate gross pay and a simple take-home amount from total weekly hours,
+        hourly rate, weekly overtime, and deductions.
       </p>
 
       <div className="calc-grid">
@@ -87,7 +87,7 @@ export default function PaycheckCalculator() {
           </label>
 
           <label className="calc-field" htmlFor="paycheckOvertimeThreshold">
-            <span>Overtime Starts After</span>
+            <span>Weekly Overtime Starts After</span>
             <input
               id="paycheckOvertimeThreshold"
               type="text"
@@ -95,6 +95,11 @@ export default function PaycheckCalculator() {
               value={overtimeThreshold}
               onChange={(event) => setOvertimeThreshold(formatNumberInput(event.target.value))}
             />
+            <small className="field-note">
+              This calculator uses total hours. For overtime after 8 hours in a
+              day, use the{" "}
+              <a href="/tools/time-card-calculator/">Time Card Calculator</a>.
+            </small>
           </label>
 
           <label className="calc-field" htmlFor="paycheckOvertimeMultiplier">
@@ -181,8 +186,15 @@ export default function PaycheckCalculator() {
       <section className="helper-panel">
         <h3>How we calculate this</h3>
         <p>
-          We split hours into regular and overtime hours, apply the overtime multiplier,
-          then subtract your estimated deduction percentage from gross pay.
+          We split your total weekly hours into regular and overtime hours using
+          the weekly threshold you enter, apply the overtime multiplier, then
+          subtract your estimated deduction percentage from gross pay.
+        </p>
+        <p>
+          This calculator does not estimate daily overtime because it does not
+          collect day-by-day hours. If your overtime starts after 8 hours in a
+          day, use the{" "}
+          <a href="/tools/time-card-calculator/">Time Card Calculator</a> instead.
         </p>
       </section>
     </div>
