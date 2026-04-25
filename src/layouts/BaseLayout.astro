@@ -11,6 +11,7 @@ interface Props {
 const { title, description, structuredData } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
 const ogType = Astro.url.pathname.startsWith("/guides/") ? "article" : "website";
+const socialImage = new URL("/social-preview.png", site.url).toString();
 const structuredDataList = structuredData
   ? Array.isArray(structuredData)
     ? structuredData
@@ -34,9 +35,16 @@ const structuredDataList = structuredData
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:locale" content="en_US" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Worker Pay Tools social preview" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Worker Pay Tools social preview" />
     {structuredDataList.map((entry) => (
       <script type="application/ld+json" set:html={JSON.stringify(entry)} />
     ))}
