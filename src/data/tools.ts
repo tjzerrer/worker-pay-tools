@@ -12,7 +12,7 @@ export const tools: Tool[] = [
   {
     slug: "time-card-calculator",
     title: "Time Card Calculator",
-    description: "Calculate total hours worked with optional unpaid breaks.",
+    description: "Track weekly work hours, unpaid breaks, overtime, and estimated gross pay.",
     category: "worker-pay",
     keywords: ["time card calculator", "hours worked calculator", "work hours"],
     relatedToolSlugs: [
@@ -26,7 +26,7 @@ export const tools: Tool[] = [
   {
     slug: "hours-worked-calculator",
     title: "Hours Worked Calculator",
-    description: "Find the number of hours between a start time and end time.",
+    description: "Calculate hours worked between start and end times, including overnight shifts and unpaid breaks.",
     category: "worker-pay",
     keywords: ["hours worked calculator", "hours between times"],
     relatedToolSlugs: ["time-card-calculator", "overtime-calculator", "net-pay-estimator"],
@@ -35,7 +35,7 @@ export const tools: Tool[] = [
   {
     slug: "overtime-calculator",
     title: "Overtime Calculator",
-    description: "Estimate overtime pay based on hours worked and hourly rate.",
+    description: "Calculate overtime pay from hourly rate, total hours worked, overtime threshold, and multiplier.",
     category: "worker-pay",
     keywords: ["overtime calculator", "overtime pay calculator"],
     relatedToolSlugs: [
@@ -49,7 +49,7 @@ export const tools: Tool[] = [
   {
     slug: "salary-to-hourly-calculator",
     title: "Salary to Hourly Calculator",
-    description: "Convert an annual salary into an hourly wage.",
+    description: "Convert annual salary to hourly pay using your weekly hours and paid weeks per year.",
     category: "worker-pay",
     keywords: ["salary to hourly calculator", "annual salary to hourly"],
     relatedToolSlugs: [
@@ -62,7 +62,7 @@ export const tools: Tool[] = [
   {
     slug: "hourly-to-salary-calculator",
     title: "Hourly to Salary Calculator",
-    description: "Convert an hourly wage into an annual salary estimate.",
+    description: "Convert hourly wage to annual salary, monthly pay, weekly pay, and daily pay.",
     category: "worker-pay",
     keywords: ["hourly to salary calculator", "hourly wage to annual salary"],
     relatedToolSlugs: [
@@ -75,7 +75,7 @@ export const tools: Tool[] = [
   {
     slug: "paycheck-calculator",
     title: "Paycheck Calculator",
-    description: "Estimate gross pay based on hours worked and hourly rate.",
+    description: "Estimate gross pay, overtime pay, deductions, and take-home pay from weekly hours.",
     category: "worker-pay",
     keywords: ["paycheck calculator", "gross pay calculator"],
     relatedToolSlugs: [
@@ -89,7 +89,7 @@ export const tools: Tool[] = [
   {
     slug: "net-pay-estimator",
     title: "Net Pay Estimator",
-    description: "Estimate take-home pay after percentage and fixed deductions.",
+    description: "Estimate take-home pay from gross pay, deduction percentage, and fixed deductions.",
     category: "worker-pay",
     keywords: ["net pay calculator", "take home pay calculator", "deduction calculator"],
     relatedToolSlugs: [

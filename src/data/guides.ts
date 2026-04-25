@@ -20,7 +20,7 @@ export const guides: Guide[] = [
   {
     slug: "how-to-calculate-work-hours",
     title: "How to Calculate Work Hours",
-    description: "Learn how to total your work hours and subtract unpaid breaks.",
+    description: "Learn how to total work hours, subtract unpaid breaks, and double-check shift totals.",
     category: "worker-pay",
     relatedToolSlugs: ["time-card-calculator", "hours-worked-calculator"],
     calculatorPrompt:
@@ -61,7 +61,7 @@ export const guides: Guide[] = [
   {
     slug: "how-overtime-pay-works",
     title: "How Overtime Works",
-    description: "A simple explanation of overtime pay and how to estimate it.",
+    description: "Understand overtime pay rules, time-and-a-half, and how to estimate overtime earnings.",
     category: "worker-pay",
     relatedToolSlugs: ["overtime-calculator", "time-card-calculator"],
     calculatorPrompt:
@@ -109,7 +109,7 @@ export const guides: Guide[] = [
   {
     slug: "salary-vs-hourly-pay",
     title: "Salary vs Hourly Pay",
-    description: "Understand the difference between salaried and hourly compensation.",
+    description: "Compare salary and hourly pay using work hours, paid weeks, and effective hourly rate.",
     category: "worker-pay",
     relatedToolSlugs: ["salary-to-hourly-calculator", "hourly-to-salary-calculator"],
     calculatorPrompt:
@@ -143,7 +143,7 @@ export const guides: Guide[] = [
     slug: "gross-pay-vs-net-pay",
     title: "Gross Pay vs Net Pay",
     description:
-      "Understanding the difference between gross pay and net pay helps you know what you earn versus what you actually take home.",
+      "Understand gross pay vs net pay so you can compare earnings, deductions, and take-home pay more clearly.",
     category: "worker-pay",
     relatedToolSlugs: [
       "net-pay-estimator",

@@ -21,6 +21,7 @@ export function getStaticPaths() {
 
 const { tool } = Astro.props;
 const toolUrl = `${site.url}/tools/${tool.slug}/`;
+const seoTitle = `${tool.title} | Worker Pay Tools`;
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -65,7 +66,12 @@ const structuredData = [
 ];
 ---
 
-<ToolLayout tool={tool} structuredData={structuredData}>
+<ToolLayout
+  tool={{ ...tool, title: seoTitle }}
+  structuredData={structuredData}
+  socialImage={`/social/tools/${tool.slug}.png`}
+  socialImageAlt={`${tool.title} social preview card`}
+>
   <section class="tool-page-intro">
     <p class="tool-page-kicker">Calculator</p>
     <h1>{tool.title}</h1>

@@ -5,11 +5,19 @@ import type { Tool } from "../data/tools";
 interface Props {
   tool: Tool;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  socialImage?: string;
+  socialImageAlt?: string;
 }
 
-const { tool, structuredData } = Astro.props;
+const { tool, structuredData, socialImage, socialImageAlt } = Astro.props;
 ---
 
-<BaseLayout title={tool.title} description={tool.description} structuredData={structuredData}>
+<BaseLayout
+  title={tool.title}
+  description={tool.description}
+  structuredData={structuredData}
+  socialImage={socialImage}
+  socialImageAlt={socialImageAlt}
+>
   <slot />
 </BaseLayout>

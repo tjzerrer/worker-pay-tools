@@ -5,11 +5,19 @@ import type { Guide } from "../data/guides";
 interface Props {
   guide: Guide;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  socialImage?: string;
+  socialImageAlt?: string;
 }
 
-const { guide, structuredData } = Astro.props;
+const { guide, structuredData, socialImage, socialImageAlt } = Astro.props;
 ---
 
-<BaseLayout title={guide.title} description={guide.description} structuredData={structuredData}>
+<BaseLayout
+  title={guide.title}
+  description={guide.description}
+  structuredData={structuredData}
+  socialImage={socialImage}
+  socialImageAlt={socialImageAlt}
+>
   <slot />
 </BaseLayout>

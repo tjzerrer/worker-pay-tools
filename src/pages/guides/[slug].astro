@@ -13,6 +13,7 @@ export function getStaticPaths() {
 
 const { guide } = Astro.props;
 const guideUrl = `${site.url}/guides/${guide.slug}/`;
+const seoTitle = `${guide.title} Guide | Worker Pay Tools`;
 
 const relatedTools = guide.relatedToolSlugs
   ? guide.relatedToolSlugs
@@ -73,7 +74,12 @@ const structuredData = [
 ];
 ---
 
-<GuideLayout guide={guide} structuredData={structuredData}>
+<GuideLayout
+  guide={{ ...guide, title: seoTitle }}
+  structuredData={structuredData}
+  socialImage={`/social/guides/${guide.slug}.png`}
+  socialImageAlt={`${guide.title} guide social preview card`}
+>
   <article class="guide-article">
     <section class="guide-page-intro">
       <p class="guide-page-kicker">Guides</p>
