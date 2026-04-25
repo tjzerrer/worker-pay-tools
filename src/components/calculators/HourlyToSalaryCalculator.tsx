@@ -21,12 +21,38 @@ export default function HourlyToSalaryCalculator() {
   const [weeksPerYear, setWeeksPerYear] = useState("52");
   const [daysPerWeek, setDaysPerWeek] = useState("5");
   const [results, setResults] = useState<Results | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function calculate() {
     const rate = parseNumberInput(hourlyRate);
     const weeklyHours = parseNumberInput(hoursPerWeek);
     const paidWeeks = parseNumberInput(weeksPerYear);
     const workDays = parseNumberInput(daysPerWeek);
+    const errors: Record<string, string> = {};
+
+    if (rate <= 0) {
+      errors.hourlyRate = "Enter an hourly wage to calculate a salary.";
+    }
+
+    if (weeklyHours <= 0) {
+      errors.hoursPerWeek = "Enter hours per week greater than zero.";
+    }
+
+    if (paidWeeks <= 0) {
+      errors.weeksPerYear = "Enter paid weeks per year greater than zero.";
+    }
+
+    if (workDays <= 0) {
+      errors.daysPerWeek = "Enter days per week greater than zero.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setResults(null);
+      return;
+    }
+
+    setFieldErrors({});
     const weeklyPay = rate * weeklyHours;
     const annualPay = weeklyPay * paidWeeks;
     const dailyPay = workDays > 0 ? weeklyPay / workDays : 0;
@@ -46,6 +72,7 @@ export default function HourlyToSalaryCalculator() {
     setWeeksPerYear("52");
     setDaysPerWeek("5");
     setResults(null);
+    setFieldErrors({});
   }
 
   return (
@@ -59,48 +86,94 @@ export default function HourlyToSalaryCalculator() {
         <div className="calc-panel">
           <h3>Enter Hourly Details</h3>
 
-          <label className="calc-field" htmlFor="hourlyWage">
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="validation-alert">
+              Add the missing information below to calculate a complete hourly-to-salary estimate.
+            </div>
+          )}
+
+          <label className={`calc-field${fieldErrors.hourlyRate ? " has-error" : ""}`} htmlFor="hourlyWage">
             <span>Hourly Wage ($)</span>
             <input
               id="hourlyWage"
               type="text"
               inputMode="decimal"
               value={hourlyRate}
-              onChange={(event) => setHourlyRate(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setHourlyRate(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hourlyRate;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hourlyRate && (
+              <small className="error-message">{fieldErrors.hourlyRate}</small>
+            )}
           </label>
 
-          <label className="calc-field" htmlFor="hourlyHoursPerWeek">
+          <label className={`calc-field${fieldErrors.hoursPerWeek ? " has-error" : ""}`} htmlFor="hourlyHoursPerWeek">
             <span>Hours per Week</span>
             <input
               id="hourlyHoursPerWeek"
               type="text"
               inputMode="decimal"
               value={hoursPerWeek}
-              onChange={(event) => setHoursPerWeek(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setHoursPerWeek(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hoursPerWeek;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hoursPerWeek && (
+              <small className="error-message">{fieldErrors.hoursPerWeek}</small>
+            )}
           </label>
 
-          <label className="calc-field" htmlFor="hourlyWeeksPerYear">
+          <label className={`calc-field${fieldErrors.weeksPerYear ? " has-error" : ""}`} htmlFor="hourlyWeeksPerYear">
             <span>Paid Weeks per Year</span>
             <input
               id="hourlyWeeksPerYear"
               type="text"
               inputMode="decimal"
               value={weeksPerYear}
-              onChange={(event) => setWeeksPerYear(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setWeeksPerYear(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.weeksPerYear;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.weeksPerYear && (
+              <small className="error-message">{fieldErrors.weeksPerYear}</small>
+            )}
           </label>
 
-          <label className="calc-field" htmlFor="hourlyDaysPerWeek">
+          <label className={`calc-field${fieldErrors.daysPerWeek ? " has-error" : ""}`} htmlFor="hourlyDaysPerWeek">
             <span>Days per Week</span>
             <input
               id="hourlyDaysPerWeek"
               type="text"
               inputMode="decimal"
               value={daysPerWeek}
-              onChange={(event) => setDaysPerWeek(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setDaysPerWeek(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.daysPerWeek;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.daysPerWeek && (
+              <small className="error-message">{fieldErrors.daysPerWeek}</small>
+            )}
           </label>
 
           <div className="calc-actions">

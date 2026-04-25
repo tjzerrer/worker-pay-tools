@@ -5,10 +5,17 @@ import { site } from "../data/site";
 interface Props {
   title: string;
   description: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, structuredData } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
+const ogType = Astro.url.pathname.startsWith("/guides/") ? "article" : "website";
+const structuredDataList = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : [];
 ---
 
 <!doctype html>
@@ -21,6 +28,18 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.ico" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {structuredDataList.map((entry) => (
+      <script type="application/ld+json" set:html={JSON.stringify(entry)} />
+    ))}
     <style is:global>
       :root {
         --border: #d8e2ef;
@@ -374,6 +393,12 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
         font-weight: 700;
       }
 
+      .calc-field.has-error input {
+        border-color: #dc2626;
+        box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+        background: rgba(254, 242, 242, 0.95);
+      }
+
       .calc-field input {
         width: 100%;
         max-width: 280px;
@@ -412,6 +437,25 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
         font-size: 0.9rem;
         font-weight: 400;
         line-height: 1.4;
+      }
+
+      .error-message {
+        display: block;
+        color: #b91c1c;
+        font-size: 0.88rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      .validation-alert {
+        margin-bottom: 1rem;
+        padding: 0.85rem 0.95rem;
+        border: 1px solid rgba(220, 38, 38, 0.22);
+        border-radius: var(--radius-sm);
+        background: rgba(254, 242, 242, 0.96);
+        color: #991b1b;
+        font-weight: 600;
+        line-height: 1.45;
       }
 
       .muted {

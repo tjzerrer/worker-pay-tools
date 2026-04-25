@@ -37,8 +37,14 @@ export default function TimeCardCalculator() {
   const [totalHours, setTotalHours] = useState("");
   const [grossPay, setGrossPay] = useState("");
   const [breakdown, setBreakdown] = useState<PayBreakdown | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function updateDay(index: number, field: keyof DayEntry, value: string) {
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next.days;
+      return next;
+    });
     setDays((prev) =>
       prev.map((day, i) => (i === index ? { ...day, [field]: value } : day))
     );
@@ -60,14 +66,38 @@ export default function TimeCardCalculator() {
     setTotalHours("");
     setGrossPay("");
     setBreakdown(null);
+    setFieldErrors({});
   }
 
   function calculate() {
+    const completeDays = days.filter((day) => day.start && day.end);
+    const hasPartialDay = days.some((day) => (day.start && !day.end) || (!day.start && day.end));
+    const errors: Record<string, string> = {};
+
+    if (hasPartialDay) {
+      errors.days = "Finish both the start and end time for each day you enter.";
+    } else if (completeDays.length === 0) {
+      errors.days = "Enter at least one day with a start and end time.";
+    }
+
+    if (parseNumberInput(hourlyRate) <= 0) {
+      errors.hourlyRate = "Enter an hourly rate to estimate pay.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setTotalHours("");
+      setGrossPay("");
+      setBreakdown(null);
+      return;
+    }
+
+    setFieldErrors({});
     let total = 0;
     let dailyRegularTotal = 0;
     let dailyOvertimeTotal = 0;
 
-    for (const day of days) {
+    for (const day of completeDays) {
       if (!day.start || !day.end) continue;
 
       const startTime = new Date(`1970-01-01T${day.start}:00`);
@@ -317,6 +347,33 @@ export default function TimeCardCalculator() {
           margin-top: 0;
         }
 
+        .tc-error-message {
+          display: block;
+          margin-top: 0.35rem;
+          color: #b91c1c;
+          font-size: 0.88rem;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+
+        .tc-validation-alert {
+          margin-bottom: 1rem;
+          padding: 0.85rem 0.95rem;
+          border: 1px solid rgba(220, 38, 38, 0.22);
+          border-radius: 12px;
+          background: rgba(254, 242, 242, 0.96);
+          color: #991b1b;
+          font-weight: 600;
+          line-height: 1.45;
+        }
+
+        .tc-input.tc-input-error,
+        .tc-rate-input.tc-input-error {
+          border-color: #dc2626;
+          box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+          background: rgba(254, 242, 242, 0.95);
+        }
+
         .tc-badge-row {
           display: flex;
           gap: 0.5rem;
@@ -393,6 +450,12 @@ export default function TimeCardCalculator() {
             Leave unused days blank, or add and remove days as needed.
           </p>
 
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="tc-validation-alert">
+              Add the missing required information below to calculate a complete time card estimate.
+            </div>
+          )}
+
           <div className="tc-grid-head">
             <div>Day</div>
             <div>Start</div>
@@ -408,7 +471,7 @@ export default function TimeCardCalculator() {
               <div>
                 <span className="tc-mobile-label">Start</span>
                 <input
-                  className="tc-input"
+                  className={`tc-input${fieldErrors.days ? " tc-input-error" : ""}`}
                   type="time"
                   value={day.start}
                   onChange={(e) => updateDay(i, "start", e.target.value)}
@@ -418,7 +481,7 @@ export default function TimeCardCalculator() {
               <div>
                 <span className="tc-mobile-label">End</span>
                 <input
-                  className="tc-input"
+                  className={`tc-input${fieldErrors.days ? " tc-input-error" : ""}`}
                   type="time"
                   value={day.end}
                   onChange={(e) => updateDay(i, "end", e.target.value)}
@@ -455,6 +518,8 @@ export default function TimeCardCalculator() {
             </div>
           ))}
 
+          {fieldErrors.days && <small className="tc-error-message">{fieldErrors.days}</small>}
+
           <div className="tc-actions">
             <button type="button" onClick={addDay} className="tc-secondary-btn">
               Add Day
@@ -476,12 +541,22 @@ export default function TimeCardCalculator() {
             <br />
             <input
               id="hourlyRate"
-              className="tc-rate-input"
+              className={`tc-rate-input${fieldErrors.hourlyRate ? " tc-input-error" : ""}`}
               type="text"
               inputMode="decimal"
               value={hourlyRate}
-              onChange={(e) => setHourlyRate(formatNumberInput(e.target.value))}
+              onChange={(e) => {
+                setHourlyRate(formatNumberInput(e.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hourlyRate;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hourlyRate && (
+              <small className="tc-error-message">{fieldErrors.hourlyRate}</small>
+            )}
           </div>
 
           <fieldset className="tc-field" style={{ border: 0, padding: 0 }}>

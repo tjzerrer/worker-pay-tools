@@ -4,11 +4,12 @@ import type { Tool } from "../data/tools";
 
 interface Props {
   tool: Tool;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { tool } = Astro.props;
+const { tool, structuredData } = Astro.props;
 ---
 
-<BaseLayout title={tool.title} description={tool.description}>
+<BaseLayout title={tool.title} description={tool.description} structuredData={structuredData}>
   <slot />
 </BaseLayout>

@@ -2,11 +2,31 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { tools } from "../data/tools";
 import { guides } from "../data/guides";
+import { site } from "../data/site";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: site.name,
+    url: site.url,
+    description: site.description
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Worker Pay Tools",
+    url: site.url,
+    description:
+      "Worker pay calculators and guides for time cards, overtime, salary conversions, and paycheck estimates."
+  }
+];
 ---
 
 <BaseLayout
   title="Worker Pay Tools"
   description="Simple calculators for work hours, overtime, salary conversions, and paycheck estimates."
+  structuredData={structuredData}
 >
   <section class="hero">
     <div class="hero-shell">

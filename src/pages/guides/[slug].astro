@@ -2,6 +2,7 @@
 import GuideLayout from "../../layouts/GuideLayout.astro";
 import { guides } from "../../data/guides";
 import { tools } from "../../data/tools";
+import { site } from "../../data/site";
 
 export function getStaticPaths() {
   return guides.map((guide) => ({
@@ -11,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { guide } = Astro.props;
+const guideUrl = `${site.url}/guides/${guide.slug}/`;
 
 const relatedTools = guide.relatedToolSlugs
   ? guide.relatedToolSlugs
@@ -25,9 +27,53 @@ function findTools(slugs: string[] = []) {
     .map((slug) => tools.find((tool) => tool.slug === slug))
     .filter((tool) => tool !== undefined);
 }
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: guide.title,
+    description: guide.description,
+    url: guideUrl,
+    mainEntityOfPage: guideUrl,
+    author: {
+      "@type": "Organization",
+      name: site.name
+    },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: site.url
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Guides",
+        item: `${site.url}/#guides`
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: guide.title,
+        item: guideUrl
+      }
+    ]
+  }
+];
 ---
 
-<GuideLayout guide={guide}>
+<GuideLayout guide={guide} structuredData={structuredData}>
   <article class="guide-article">
     <section class="guide-page-intro">
       <p class="guide-page-kicker">Guides</p>

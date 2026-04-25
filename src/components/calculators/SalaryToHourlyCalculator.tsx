@@ -20,11 +20,33 @@ export default function SalaryToHourlyCalculator() {
   const [hoursPerWeek, setHoursPerWeek] = useState("40");
   const [weeksPerYear, setWeeksPerYear] = useState("52");
   const [results, setResults] = useState<Results | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function calculate() {
     const annualSalary = parseNumberInput(salary);
     const weeklyHours = parseNumberInput(hoursPerWeek);
     const paidWeeks = parseNumberInput(weeksPerYear);
+    const errors: Record<string, string> = {};
+
+    if (annualSalary <= 0) {
+      errors.salary = "Enter an annual salary to calculate an hourly wage.";
+    }
+
+    if (weeklyHours <= 0) {
+      errors.hoursPerWeek = "Enter hours per week greater than zero.";
+    }
+
+    if (paidWeeks <= 0) {
+      errors.weeksPerYear = "Enter paid weeks per year greater than zero.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setResults(null);
+      return;
+    }
+
+    setFieldErrors({});
     const annualHours = weeklyHours * paidWeeks;
     const hourly = annualHours > 0 ? annualSalary / annualHours : 0;
 
@@ -42,6 +64,7 @@ export default function SalaryToHourlyCalculator() {
     setHoursPerWeek("40");
     setWeeksPerYear("52");
     setResults(null);
+    setFieldErrors({});
   }
 
   return (
@@ -55,37 +78,71 @@ export default function SalaryToHourlyCalculator() {
         <div className="calc-panel">
           <h3>Enter Salary Details</h3>
 
-          <label className="calc-field" htmlFor="annualSalary">
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="validation-alert">
+              Add the missing information below to calculate a complete salary-to-hourly estimate.
+            </div>
+          )}
+
+          <label className={`calc-field${fieldErrors.salary ? " has-error" : ""}`} htmlFor="annualSalary">
             <span>Annual Salary ($)</span>
             <input
               id="annualSalary"
               type="text"
               inputMode="decimal"
               value={salary}
-              onChange={(event) => setSalary(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setSalary(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.salary;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.salary && <small className="error-message">{fieldErrors.salary}</small>}
           </label>
 
-          <label className="calc-field" htmlFor="salaryHoursPerWeek">
+          <label className={`calc-field${fieldErrors.hoursPerWeek ? " has-error" : ""}`} htmlFor="salaryHoursPerWeek">
             <span>Hours per Week</span>
             <input
               id="salaryHoursPerWeek"
               type="text"
               inputMode="decimal"
               value={hoursPerWeek}
-              onChange={(event) => setHoursPerWeek(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setHoursPerWeek(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hoursPerWeek;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hoursPerWeek && (
+              <small className="error-message">{fieldErrors.hoursPerWeek}</small>
+            )}
           </label>
 
-          <label className="calc-field" htmlFor="salaryWeeksPerYear">
+          <label className={`calc-field${fieldErrors.weeksPerYear ? " has-error" : ""}`} htmlFor="salaryWeeksPerYear">
             <span>Paid Weeks per Year</span>
             <input
               id="salaryWeeksPerYear"
               type="text"
               inputMode="decimal"
               value={weeksPerYear}
-              onChange={(event) => setWeeksPerYear(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setWeeksPerYear(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.weeksPerYear;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.weeksPerYear && (
+              <small className="error-message">{fieldErrors.weeksPerYear}</small>
+            )}
           </label>
 
           <div className="calc-actions">

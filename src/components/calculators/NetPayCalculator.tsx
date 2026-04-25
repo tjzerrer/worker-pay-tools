@@ -13,11 +13,25 @@ export default function NetPayCalculator() {
   const [deductionPercent, setDeductionPercent] = useState("");
   const [fixedDeductions, setFixedDeductions] = useState("");
   const [results, setResults] = useState<NetPayResults | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function calculate() {
     const gross = parseNumberInput(grossPay);
     const percent = parseNumberInput(deductionPercent);
     const fixed = parseNumberInput(fixedDeductions);
+    const errors: Record<string, string> = {};
+
+    if (gross <= 0) {
+      errors.grossPay = "Enter gross pay to estimate take-home pay.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setResults(null);
+      return;
+    }
+
+    setFieldErrors({});
     const percentageDeductions = gross * (percent / 100);
     const totalDeductions = Math.max(percentageDeductions + fixed, 0);
     const net = Math.max(gross - totalDeductions, 0);
@@ -35,6 +49,7 @@ export default function NetPayCalculator() {
     setDeductionPercent("");
     setFixedDeductions("");
     setResults(null);
+    setFieldErrors({});
   }
 
   return (
@@ -53,15 +68,31 @@ export default function NetPayCalculator() {
             to subtract taxes, benefits, or other deductions.
           </p>
 
-          <label className="calc-field compact-field" htmlFor="netPayGross">
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="validation-alert">
+              Add the missing required field below to calculate a complete net pay estimate.
+            </div>
+          )}
+
+          <label className={`calc-field compact-field${fieldErrors.grossPay ? " has-error" : ""}`} htmlFor="netPayGross">
             <span>Gross Pay ($)</span>
             <input
               id="netPayGross"
               type="text"
               inputMode="decimal"
               value={grossPay}
-              onChange={(event) => setGrossPay(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setGrossPay(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.grossPay;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.grossPay && (
+              <small className="error-message">{fieldErrors.grossPay}</small>
+            )}
           </label>
 
           <label className="calc-field compact-field" htmlFor="netPayPercent">

@@ -18,6 +18,7 @@ export default function PaycheckCalculator() {
   const [overtimeMultiplier, setOvertimeMultiplier] = useState("1.5");
   const [deductionPercent, setDeductionPercent] = useState("0");
   const [results, setResults] = useState<Results | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function calculate() {
     const rate = parseNumberInput(hourlyRate);
@@ -25,6 +26,23 @@ export default function PaycheckCalculator() {
     const threshold = parseNumberInput(overtimeThreshold) || 40;
     const multiplier = parseNumberInput(overtimeMultiplier) || 1.5;
     const deductionRate = parseNumberInput(deductionPercent) / 100;
+    const errors: Record<string, string> = {};
+
+    if (rate <= 0) {
+      errors.hourlyRate = "Enter an hourly rate to estimate paycheck totals.";
+    }
+
+    if (hours <= 0) {
+      errors.hoursWorked = "Enter total hours worked to calculate gross pay.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setResults(null);
+      return;
+    }
+
+    setFieldErrors({});
 
     const overtimeHours = Math.max(hours - threshold, 0);
     const regularHours = Math.min(hours, threshold);
@@ -50,6 +68,7 @@ export default function PaycheckCalculator() {
     setOvertimeMultiplier("1.5");
     setDeductionPercent("0");
     setResults(null);
+    setFieldErrors({});
   }
 
   return (
@@ -64,26 +83,52 @@ export default function PaycheckCalculator() {
         <div className="calc-panel">
           <h3>Enter Paycheck Details</h3>
 
-          <label className="calc-field" htmlFor="paycheckHourlyRate">
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="validation-alert">
+              Add the missing required fields below to calculate a complete paycheck estimate.
+            </div>
+          )}
+
+          <label className={`calc-field${fieldErrors.hourlyRate ? " has-error" : ""}`} htmlFor="paycheckHourlyRate">
             <span>Hourly Rate ($)</span>
             <input
               id="paycheckHourlyRate"
               type="text"
               inputMode="decimal"
               value={hourlyRate}
-              onChange={(event) => setHourlyRate(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setHourlyRate(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hourlyRate;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hourlyRate && (
+              <small className="error-message">{fieldErrors.hourlyRate}</small>
+            )}
           </label>
 
-          <label className="calc-field" htmlFor="paycheckHoursWorked">
+          <label className={`calc-field${fieldErrors.hoursWorked ? " has-error" : ""}`} htmlFor="paycheckHoursWorked">
             <span>Total Hours Worked</span>
             <input
               id="paycheckHoursWorked"
               type="text"
               inputMode="decimal"
               value={hoursWorked}
-              onChange={(event) => setHoursWorked(formatNumberInput(event.target.value))}
+              onChange={(event) => {
+                setHoursWorked(formatNumberInput(event.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hoursWorked;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hoursWorked && (
+              <small className="error-message">{fieldErrors.hoursWorked}</small>
+            )}
           </label>
 
           <label className="calc-field" htmlFor="paycheckOvertimeThreshold">

@@ -16,12 +16,30 @@ export default function OvertimeCalculator() {
   const [threshold, setThreshold] = useState("40");
   const [multiplier, setMultiplier] = useState("1.5");
   const [results, setResults] = useState<OvertimeResults | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   function calculate() {
     const r = parseNumberInput(rate);
     const h = parseNumberInput(hours);
     const t = parseNumberInput(threshold) || 40;
     const m = parseNumberInput(multiplier) || 1.5;
+    const errors: Record<string, string> = {};
+
+    if (r <= 0) {
+      errors.rate = "Enter an hourly rate to estimate overtime pay.";
+    }
+
+    if (h <= 0) {
+      errors.hours = "Enter total hours worked to calculate overtime pay.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setResults(null);
+      return;
+    }
+
+    setFieldErrors({});
 
     const overtimeHours = Math.max(h - t, 0);
     const regularHours = Math.min(h, t);
@@ -45,6 +63,7 @@ export default function OvertimeCalculator() {
     setThreshold("40");
     setMultiplier("1.5");
     setResults(null);
+    setFieldErrors({});
   }
 
   return (
@@ -184,6 +203,32 @@ export default function OvertimeCalculator() {
           margin-top: 0;
         }
 
+        .ot-error-message {
+          display: block;
+          margin-top: 0.35rem;
+          color: #b91c1c;
+          font-size: 0.88rem;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+
+        .ot-validation-alert {
+          margin-bottom: 1rem;
+          padding: 0.85rem 0.95rem;
+          border: 1px solid rgba(220, 38, 38, 0.22);
+          border-radius: 12px;
+          background: rgba(254, 242, 242, 0.96);
+          color: #991b1b;
+          font-weight: 600;
+          line-height: 1.45;
+        }
+
+        .ot-input.ot-input-error {
+          border-color: #dc2626;
+          box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+          background: rgba(254, 242, 242, 0.95);
+        }
+
         @media (max-width: 800px) {
           .ot-wrap {
             grid-template-columns: 1fr;
@@ -205,18 +250,32 @@ export default function OvertimeCalculator() {
             Adjust the overtime threshold and multiplier if your job uses a different rule.
           </p>
 
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="ot-validation-alert">
+              Add the missing required fields below to calculate a complete overtime estimate.
+            </div>
+          )}
+
           <div className="ot-field">
             <label className="ot-label" htmlFor="rate">
               Hourly Rate ($)
             </label>
             <input
               id="rate"
-              className="ot-input"
+              className={`ot-input${fieldErrors.rate ? " ot-input-error" : ""}`}
               type="text"
               inputMode="decimal"
               value={rate}
-              onChange={(e) => setRate(formatNumberInput(e.target.value))}
+              onChange={(e) => {
+                setRate(formatNumberInput(e.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.rate;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.rate && <small className="ot-error-message">{fieldErrors.rate}</small>}
           </div>
 
           <div className="ot-field">
@@ -225,12 +284,22 @@ export default function OvertimeCalculator() {
             </label>
             <input
               id="hours"
-              className="ot-input"
+              className={`ot-input${fieldErrors.hours ? " ot-input-error" : ""}`}
               type="text"
               inputMode="decimal"
               value={hours}
-              onChange={(e) => setHours(formatNumberInput(e.target.value))}
+              onChange={(e) => {
+                setHours(formatNumberInput(e.target.value));
+                setFieldErrors((current) => {
+                  const next = { ...current };
+                  delete next.hours;
+                  return next;
+                });
+              }}
             />
+            {fieldErrors.hours && (
+              <small className="ot-error-message">{fieldErrors.hours}</small>
+            )}
           </div>
 
           <div className="ot-field">
