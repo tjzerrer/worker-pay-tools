@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../data/site";
+
+const title = `Contact | ${site.name}`;
+const description =
+  "Send a message about Worker Pay Tools, calculator suggestions, or questions about the pay calculators.";
+const contactUrl = `${site.url}/contact/`;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: title,
+    description,
+    url: contactUrl,
+    isPartOf: {
+      "@type": "WebSite",
+      name: site.name,
+      url: site.url
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: site.url
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Contact",
+        item: contactUrl
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <section class="tool-page-intro">
+    <div class="tool-page-kicker">Contact</div>
+    <h1>Questions, suggestions, or calculator requests.</h1>
+    <p>Send a message directly from the form below.</p>
+  </section>
+
+  <section class="detail-grid">
+    <article class="detail-card">
+      <h2>Send a message</h2>
+      <form class="contact-form" action={site.contactFormAction} method="POST">
+        <input type="hidden" name="_subject" value="Worker Pay Tools contact form" />
+        <input type="hidden" name="_next" value={`${site.url}/contact/thanks/`} />
+        <input type="hidden" name="_captcha" value="false" />
+        <input class="contact-form__honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" />
+
+        <div class="contact-form__row">
+          <label class="calc-field">
+            <span>Name</span>
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+
+          <label class="calc-field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+        </div>
+
+        <div class="contact-form__row">
+          <label class="calc-field">
+            <span>Subject</span>
+            <input type="text" name="subject" required />
+          </label>
+        </div>
+
+        <label class="calc-field">
+          <span>Message</span>
+          <textarea class="contact-textarea" name="message" required></textarea>
+        </label>
+
+        <div class="calc-actions">
+          <button class="primary-button" type="submit">Send message</button>
+        </div>
+      </form>
+    </article>
+
+    <article class="detail-card">
+      <h2>What to include</h2>
+      <p>If you are asking about a calculator, include the tool name, the numbers you entered, and what result you expected to see.</p>
+      <div class="disclaimer-card">
+        This calculator site is for educational and planning purposes only. It does not replace professional payroll, tax, legal, or accounting advice.
+      </div>
+    </article>
+  </section>
+</BaseLayout>

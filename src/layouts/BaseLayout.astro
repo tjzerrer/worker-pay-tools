@@ -765,6 +765,133 @@ const structuredDataList = structuredData
           var(--shadow-sm);
       }
 
+      .detail-grid {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      .detail-card {
+        padding: 1.35rem;
+        border: 1px solid rgba(216, 226, 239, 0.94);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .detail-card h2 {
+        margin-bottom: 0.75rem;
+      }
+
+      .detail-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .contact-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .contact-form__row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .contact-form__row .calc-field {
+        flex: 0 1 220px;
+      }
+
+      .contact-form__row .calc-field.compact-field {
+        flex-basis: 180px;
+      }
+
+      .contact-textarea {
+        width: min(100%, 560px);
+        min-height: 190px;
+        border: 1px solid rgba(195, 210, 227, 0.96);
+        border-radius: var(--radius-sm);
+        background: rgba(247, 250, 253, 0.92);
+        padding: 0.75rem 0.85rem;
+        font: inherit;
+        color: var(--text);
+        resize: vertical;
+        transition:
+          border-color 120ms ease,
+          box-shadow 120ms ease,
+          background-color 120ms ease;
+      }
+
+      .contact-textarea:hover {
+        border-color: rgba(138, 160, 189, 0.95);
+      }
+
+      .contact-textarea:focus-visible {
+        outline: none;
+        border-color: rgba(15, 118, 110, 0.68);
+        box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+        background: rgba(255, 255, 255, 0.96);
+      }
+
+      .contact-form__honeypot {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .disclaimer-card {
+        border: 1px solid rgba(216, 226, 239, 0.94);
+        border-radius: var(--radius);
+        background: rgba(240, 247, 251, 0.82);
+        padding: 1rem 1.05rem;
+        color: var(--muted);
+      }
+
+      .site-footer {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem 2.25rem;
+      }
+
+      .site-footer__content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem 1.5rem;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid rgba(216, 226, 239, 0.94);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.78);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .footer-note {
+        display: grid;
+        gap: 0.25rem;
+      }
+
+      .footer-note strong {
+        font-size: 0.98rem;
+      }
+
+      .footer-note span {
+        color: var(--muted);
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 1.15rem;
+      }
+
+      .footer-links a {
+        color: var(--text);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .footer-links a:hover {
+        color: var(--brand);
+      }
+
       @media (max-width: 860px) {
         .calc-grid {
           grid-template-columns: 1fr;
@@ -806,6 +933,21 @@ const structuredDataList = structuredData
         .primary-button,
         .secondary-button {
           width: 100%;
+        }
+
+        .contact-form__row {
+          flex-direction: column;
+        }
+
+        .contact-form__row .calc-field,
+        .contact-textarea {
+          width: 100%;
+          max-width: none;
+        }
+
+        .site-footer__content {
+          align-items: flex-start;
+          flex-direction: column;
         }
 
         .calc-field input {
@@ -1020,6 +1162,21 @@ const structuredDataList = structuredData
     <main class="page-wrap">
       <slot />
     </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__content">
+        <div class="footer-note">
+          <strong>{site.name}</strong>
+          <span>Fast calculators for time cards, overtime, paychecks, and wage checks.</span>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="/#tools">Tools</a>
+          <a href="/#guides">Guides</a>
+          <a href="/contact/">Contact</a>
+        </nav>
+      </div>
+    </footer>
 
     <Analytics />
   </body>
